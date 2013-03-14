@@ -1,0 +1,11 @@
+
+asciidoc:
+    attributes:
+      source-highlighter: coderay
+
+
+profiles:
+  production:
+    base_url: http://undertow-io.github.com/undertow
+    deploy:
+      host: github_pages
