@@ -6,6 +6,6 @@ asciidoc:
 
 profiles:
   production:
-    base_url: http://undertow-io.github.com/undertow
+    base_url: http://undertow-io.github.com/undertow-io-site
     deploy:
       host: github_pages
