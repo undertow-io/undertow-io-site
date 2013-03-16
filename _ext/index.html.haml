@@ -1,0 +1,19 @@
+---
+layout: base
+---
+%h1 #{page.data['label']}
+
+- page.data.children.each do |d1|
+  %ul
+    %li
+      %a{:href=>d1.url} #{d1.label}
+      - if d1.children
+        %ul
+          - d1.children.each do |d2|
+            %li
+              %a{:href=>d1.url + d2.url} #{d2.label}
+              - if d2.children
+                %ul
+                  - d2.children.each do |d3|
+                    %li
+                      %a{:href=>d1.url + d2.url + d3.url} #{d3.label}
