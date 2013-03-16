@@ -1,0 +1,14 @@
+---
+layout: base
+---
+
+%ul.breadcrumb
+  - page.breadcrumbs.each do |c|
+    %li
+      %a{:href=>c.url} #{c.label}
+      %span.divider /
+  %li.active #{page.currentBreadcrumb.label}
+
+
+
+~ content

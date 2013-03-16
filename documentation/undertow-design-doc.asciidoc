@@ -1,6 +1,6 @@
 ---
 title: Undertow Design Document
-layout: base
+layout: doc
 ---
 
 Undertow Design Document
