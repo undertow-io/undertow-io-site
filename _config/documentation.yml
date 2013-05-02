@@ -10,6 +10,9 @@ documentation:
       label: Request Lifecycle
       url: undertow-request-lifecycle.html
     -
+      label: Undertow Design Decisions
+      url: undertow-design-decisions.asciidoc
+    -
       label: Tutorials
       url: tutorials/
       children:
