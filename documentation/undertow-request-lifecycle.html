@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8' />
+    <title>Undertow</title>
+    <meta content='width=device-width, initial-scale=1.0' name='viewport' />
+    <style type='text/css'>
+      /*<![CDATA[*/
+        body {
+          padding-top: 60px;
+        }
+      /*]]>*/
+    </style>
+    <link href='http://localhost:4242/stylesheets/styles.css' rel='stylesheet' type='text/css' />
+    <link href='http://localhost:4242/stylesheets/code.css' rel='stylesheet' type='text/css' />
+    <script src='http://localhost:4242/javascripts/highlight.pack.js' type='text/javascript'></script>
+    <script type='text/javascript'>hljs.initHighlightingOnLoad();</script>
+    <!--[if lt IE 9]>
+      <script src='//html5shim.googlecode.com/svn/trunk/html5.js' type='text/javascript'></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class='navbar navbar-fixed-top'>
+      <div class='navbar-inner'>
+        <div class='container'>
+          <a class='brand' href='http://localhost:4242'>Undertow</a>
+          <ul class='nav'>
+            <li>
+              <a href='https://github.com/undertow-io/undertow'>Source</a>
+            </li>
+            <li>
+              <a href='https://github.com/undertow-io/undertow/tags'>Download</a>
+            </li>
+            <li>
+              <a href='http://localhost:4242/documentation/index.html'>Documentation</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class='container'>
+      <a href='https://github.com/undertow-io/undertow'>
+        <img alt='Fork me on GitHub' src='https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png' style='position: absolute; top: 0; right: 0; border: 0; z-index: 10000;' />
+      </a>
+      <ul class='breadcrumb'>
+        <li>
+          <a href='http://localhost:4242/documentation/'>Documentation</a>
+          <span class='divider'>/</span>
+        </li>
+        <li class='active'>Request Lifecycle</li>
+      </ul>
+      
+      <div class="sect1">
+        <h2 id="_undertow_request_lifecyle">Undertow Request Lifecyle</h2>
+        
+        <div class="sectionbody">
+      <div class="paragraph">
+          
+        <p>This document covers the lifecycle of a web request from the point of view of the Undertow server.</p>
+      </div>
+      <div class="paragraph">
+          
+        <p>When a connection is established XNIO invokes the <tt>io.undertow.server.HttpOpenListener</tt>, this listener
+      creates a new <tt>io.undertow.server.HttpServerConnection</tt> to hold state associated with this connection,
+      and then invokes <tt>io.undertow.server.HttpReadListener</tt>.</p>
+      </div>
+      <div class="paragraph">
+          
+        <p>The HTTP read listener is responsible for parsing the incoming request, and creating a new
+      <tt>io.undertow.server.HttpServerExchange</tt> to store the request state. The exchange object contains both the request
+      and response state.</p>
+      </div>
+      <div class="paragraph">
+          
+        <p>At this point the request and response channel wrappers are setup, that are responsible for decoding and enconding
+      the request and response data.</p>
+      </div>
+      <div class="paragraph">
+          
+        <p>The root handler is then executed via <tt>io.undertow.server.HttpHandlers#executeRootHandler</tt>. Handlers are chained
+      together, and each handler can modify the exchange, send a response, or delegate to a different handler. At this point
+      there are a few different things that can happen:</p>
+      </div>
+      <div class="ulist">
+        
+        <ul>
+        
+          <li>
+            <p>The exchange can be finished. This happens when both the request and response channels are closed. If a content
+      length is set then the channel will automatically close once all the data has been written. This can also be forced
+      by calling <tt>HttpServerExchange.endExchange()</tt>, and if no data has been written yet any default response listeners
+      that have been registered with the exchange will be given the opportunity to generate a default response, such as
+      an error page. Once the current exchange is finished the exchange completion listeners will be run. The last completion
+      listener will generally start processing the next request on the connection, and will have been setup by the read listener.</p>
+            
+          </li>
+        
+          <li>
+            <p>The exchange can be dispatched by calling one of the <tt>HttpServerExchange.dispatch</tt> methods. This is similar to
+      the servlet <tt>startAsync()</tt> method. Once the call stack returns then the dispatch task (if any) will be run in
+      the provided executor (if no executor is provided it will be ran by the XNIO worker). The most common use of a
+      dispatch is to move from executing in an IO thread (where blocking operations are not allowed), to a worker thread
+      that can block. This pattern looks like:</p>
+            
+          </li>
+        
+        </ul>
+      </div>
+      <div class="listingblock">
+        
+        <div class="content monospaced">
+          
+          <pre class="highlight"><code class="java">public void handleRequest(final HttpServerExchange exchange) throws Exception {&#x000A;    if (exchange.isInIoThread()) {&#x000A;      exchange.dispatch(this);&#x000A;      return;&#x000A;    }&#x000A;    //handler code&#x000A;}</code></pre>
+          
+        </div>
+      </div>
+      <div class="ulist">
+        
+        <ul>
+        
+          <li>
+            <p>Reads/Writes can be resumed on a request or response channel. Internally this is treated like a dispatch,
+      and once the call stack returns the relevant channel will be notified about IO events. The reason why the operation
+      does not take effect until the call stack returns is to make sure that we never have multiple threads acting in the
+      same exchange.</p>
+            
+          </li>
+        
+          <li>
+            <p>The call stack can return without the exchange being dispatched. If this happens <tt>HttpServerExchange.endExchange()</tt>
+      will be called, and the request will be finished.</p>
+            
+          </li>
+        
+          <li>
+            <p>An exception can be thrown. If this propagates all the way up the call stack the exchange will be ended with a 500
+      response code.</p>
+            
+          </li>
+        
+        </ul>
+      </div>
+      
+        </div>
+        
+      </div>
+      <hr />
+      <footer>
+        <p>&copy; Red Hat 2013</p>
+      </footer>
+    </div>
+    <script src='//cdnjs.cloudflare.com/ajax/libs/jquery/1.7.1/jquery.min.js' type='text/javascript'></script>
+    <script src='http://localhost:4242/javascripts/bootstrap-collapse.js' type='text/javascript'></script>
+  </body>
+</html>
