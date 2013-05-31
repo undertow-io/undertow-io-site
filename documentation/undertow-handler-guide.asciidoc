@@ -15,7 +15,11 @@ Stuart Douglas
 Introduction
 ------------
 
-This guide provides an overview of how to write native handlers for Undertow. Lets start with a simple example:
+This guide provides an overview of how to write native handlers for Undertow. It does not cover every API method
+on the `HttpServerExchange` object, as many of them are self explanatory or covered by the javadoc. Instead
+this guide focuses on the concepts you will need to write an Undertow handler.
+
+Lets start with a simple example:
 
 [source,java]
 ----
@@ -175,6 +179,27 @@ described above, however in this case the sender implementation will use blockin
 
 By default Undertow uses buffering streams, using buffers taken from the buffer pool. If a response is small enough
 to fit in the buffer then a `Content-Length` header will automatically be set.
+
+Headers
+-------
+
+Request and response headers are accessible through the `HttpServerExchange.getRequestHeaders()` and
+`HttpServerExchange.getResponseHeaders()` methods. These methods return a `HeaderMap`, an optimised map implementation.
+
+Headers are written out with the HTTP response header when the first data is written to the underlying channel (this
+may not be the same time as the first time data is written if buffering is used).
+
+If you wish to force the headers to be written you can call the `flush()` method on either the response channel or stream.
+
+HTTP Upgrade
+------------
+
+In order to perform a HTTP upgrade you can call
+`HttpServerExchange.upgradeChannel(ExchangeCompletionListener upgradeCompleteListener)`, the response code will be set
+to 101, and once the exchange is complete your listener will be notified. Your handler is responsible for setting
+any appropriate headers that the upgrade client will be expecting.
+
+
 
 
 
