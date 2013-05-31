@@ -4,6 +4,9 @@ documentation:
   url: documentation/
   children:
     -
+      label: Undertow Handler Authors Guide
+      url: undertow-handler-guide.html
+    -
       label: Design Document
       url: undertow-design-doc.html
     -
