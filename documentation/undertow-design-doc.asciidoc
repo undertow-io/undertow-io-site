@@ -10,6 +10,7 @@ Stuart Douglas
 :Email:     <sdouglas@redhat.com>
 :Date:      2013
 :Revision:  0.2
+:imagesdir: ../images
 
 Undertow Design Document
 ------------------------
@@ -31,7 +32,7 @@ required for that task.
 
 An example handler chain could be as follows:
 
-image::#{site.base_url}/images/example.png["An Example Handler Chain",title="An Example Handler Chain"]
+image::example.png["An Example Handler Chain",title="An Example Handler Chain"]
 
 
 Servlet functionality will be built on top of the async server core. The
@@ -314,7 +315,7 @@ the `SecurityContext` is established, then the `AuthenticationMechanism`s and co
 performed in any order and finally the `AuthenticationCallHandler` but be called before any processing of
 a potentially protected resource.
 
-image::#{site.base_url}/images/security_handlers.png["An Example Security Chain",title="An Example Security Chain"]
+image::security_handlers.png["An Example Security Chain",title="An Example Security Chain"]
 
 Security mechanisms that are to be used must implement the following interface: -
 

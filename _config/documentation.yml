@@ -15,10 +15,3 @@ documentation:
     -
       label: Undertow Design Decisions
       url: undertow-design-decisions.asciidoc
-    -
-      label: Tutorials
-      url: tutorials/
-      children:
-        -
-          label: XNIO Tutorial
-          url: xnio.html

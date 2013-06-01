@@ -5,3 +5,4 @@ _site
 _tmp
 *~
 .sass-cache/
+Gemfile.lock
