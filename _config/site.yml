@@ -8,6 +8,5 @@ profiles:
   production:
     base_url: http://undertow.io
     deploy:
-      host: filemgmt.jboss.org
+      host: undertow@filemgmt.jboss.org
       path: /www_htdocs/undertow
-      username: undertow
