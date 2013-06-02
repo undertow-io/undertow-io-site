@@ -13,5 +13,9 @@ documentation:
       label: Request Lifecycle
       url: undertow-request-lifecycle.html
     -
-      label: Undertow Design Decisions
-      url: undertow-design-decisions.asciidoc
+      label: Servlet
+      url: servlet/
+      children:
+        -
+          label: Using non-blocking handlers with Servlet deployments
+          url: using-non-blocking-handlers-with-servlet.html
