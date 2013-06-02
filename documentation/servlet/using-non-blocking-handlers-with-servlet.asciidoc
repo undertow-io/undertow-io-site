@@ -4,7 +4,7 @@ layout: doc
 ---
 
 
-Using non-blocking handlers with Servlet
+Using non-blocking handlers with servlet
 ========================================
 Stuart Douglas
 :Author:    Stuart Douglas

@@ -17,5 +17,5 @@ documentation:
       url: servlet/
       children:
         -
-          label: Using non-blocking handlers with Servlet deployments
+          label: Using non-blocking handlers with servlet deployments
           url: using-non-blocking-handlers-with-servlet.html
