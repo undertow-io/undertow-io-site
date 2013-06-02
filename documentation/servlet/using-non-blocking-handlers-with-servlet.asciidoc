@@ -33,14 +33,6 @@ import io.undertow.servlet.ServletExtension;
 import io.undertow.servlet.api.DeploymentInfo;
 import io.undertow.servlet.spec.ServletContextImpl;
 
-/**
- * An example extension that registers some non-blocking handlers,
- *
- * and delegates to the servlet handler chain if none of the handlers are matched.
- *
- *
- * @author Stuart Douglas
- */
 public class NonBlockingHandlerExtension implements ServletExtension {
     @Override
     public void handleDeployment(final DeploymentInfo deploymentInfo, final ServletContextImpl servletContext) {
