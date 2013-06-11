@@ -19,6 +19,29 @@ controlled by the embeding application.
 
 Undertow is sponsored by JBoss and is the default web server in the link:github.com/wildfly/wildfly[Wildfly Application Server].
 
+Why Undertow
+------------
+
+Lightweight::
+Undertow is extremely lightweight, with the Undertow core jar coming in at under 1Mb. It is lightweight at runtime
+too, with a simple embedded server using less than 4Mb of heap space.
+
+HTTP Upgrade Support::
+Support for HTTP upgrade, to allow multiple protocols to be multiplexed over the HTTP port.
+
+Web Socket Support::
+Undertow provides full support for Web Sockets, including JSR-356 support.
+
+Servlet 3.1::
+Undertow provides support for Servlet 3.1, including support for embedded servlet. It is also possible to mix both
+Servlets and native undertow non-blocking handlers in the same deployment.
+
+Embeddable::
+Undertow can be embedded in an application or run standalone with just a few lines of code.
+
+Flexible::
+An Undertow server is configured by chaining handlers together. It is possible to add as much or as little functionality
+as you need, so you don't pay for what you are not using.
 
 Show me the code
 ----------------
