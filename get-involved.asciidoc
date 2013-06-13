@@ -1,0 +1,26 @@
+---
+layout: project-nav
+---
+
+Get Involved
+============
+
+Get Involved
+~~~~~~~~~~~~
+
+Undertow is open source and developed on link:http://github.com/undertow-io[Github]. Contributions are always welcome.
+
+Get In Contact
+~~~~~~~~~~~~~~
+
+Most discussion takes place on the mailing list
+link:http://lists.jboss.org/mailman/listinfo/undertow-dev[http://lists.jboss.org/mailman/listinfo/undertow-dev].
+
+We also hang on on Freenode in #undertow.
+
+Report a bug
+~~~~~~~~~~~~
+
+Bug reports can be submitted in the Undertow link:https://issues.jboss.org/browse/UNDERTOW[JIRA].
+
+

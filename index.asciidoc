@@ -67,6 +67,3 @@ public class HelloWorldServer {
 }
 ----
 
-
-Mailing List: link:mailto:undertow-dev@lists.jboss.org[undertow-dev@lists.jboss.org]
-link:http://lists.jboss.org/mailman/listinfo/undertow-dev[http://lists.jboss.org/mailman/listinfo/undertow-dev]
