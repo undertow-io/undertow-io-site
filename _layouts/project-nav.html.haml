@@ -1,0 +1,30 @@
+---
+layout: project
+---
+
+/ =========================Masthead=========================
+.navbar.navbar-inverse#navbar-fix
+	.navbar-inner
+		.container
+			%a.btn.btn-navbar(data-toggle="collapse" data-target=".nav-collapse")
+				%span.icon-bar
+				%span.icon-bar
+				%span.icon-bar
+			.nav-collapse.collapse
+				%ul.nav
+					%li{:class=>"#{'active' if page.output_path.start_with?('/index') }" }<
+						%a(href="#{site.base_url}/index.html") Home
+					%li{:class=>"#{'active' if page.output_path.start_with?('/downloads') }" }<
+						%a{ :href=>"https://github.com/undertow-io/undertow/tags" } Download
+					%li{:class=>"#{'active' if page.output_path.start_with?('/docs') }" }<
+						%a{ :href=>"#{site.base_url}/documentation/index.html" } Documentation
+					%li{:class=>"#{'active' if page.output_path.start_with?('/get-involved') }" }<
+						%a{ :href=>"#{site.base_url}/get-involved.html" } Get Involved
+					%li.divider
+
+				-#%ul.nav.pull-right
+				-#	%li
+				-#		%form.navbar-search
+				-#			%input.search-query#projectsearch(type="text" placeholder="Search")
+
+~ content
