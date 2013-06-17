@@ -1,0 +1,39 @@
+---
+layout: project-nav
+---
+
+Downloads
+=========
+
+Downloads
+~~~~~~~~~
+
+The easiest way to get started using Undertow is to download the
+link:http://www.wildfly.org/download/[Wildfly Application Server].
+
+Undertow is the default web server in Wildfly, so usage is as simple as deploying a war.
+
+Maven
+~~~~~
+
+If you want to embed Undertow then you will most likely want to use Maven. Add the following to your pom.xml:
+
+[source,xml]
+----
+<dependency>
+    <groupId>io.undertow</groupId>
+    <artifactId>undertow-core</artifactId>
+    <version>1.0.0.Alpha19</version>
+</dependency>
+
+<dependency>
+    <groupId>io.undertow</groupId>
+    <artifactId>undertow-servlet</artifactId>
+    <version>1.0.0.Alpha19</version>
+</dependency>
+----
+
+You will only need the Undertow Servlet artifact if you wish to use Servlet in your application.
+
+If you just want to download the jars directly you can download them from
+link:http://search.maven.org/#search|ga|1|g%3A%22io.undertow%22[Maven Central].

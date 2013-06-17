@@ -15,7 +15,7 @@ layout: project
 					%li{:class=>"#{'active' if page.output_path.start_with?('/index') }" }<
 						%a(href="#{site.base_url}/index.html") Home
 					%li{:class=>"#{'active' if page.output_path.start_with?('/downloads') }" }<
-						%a{ :href=>"https://github.com/undertow-io/undertow/tags" } Download
+						%a(href="#{site.base_url}/downloads.html") Download
 					%li{:class=>"#{'active' if page.output_path.start_with?('/docs') }" }<
 						%a{ :href=>"#{site.base_url}/documentation/index.html" } Documentation
 					%li{:class=>"#{'active' if page.output_path.start_with?('/get-involved') }" }<
