@@ -1,5 +1,5 @@
 #!/bin/sh
 
 rm -r _site
-awestruct -P production --force
-awestruct -P production --deploy
+bundle exec awestruct -P production --force
+bundle exec awestruct -P production --deploy
