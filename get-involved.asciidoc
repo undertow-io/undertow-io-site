@@ -16,7 +16,7 @@ Get In Contact
 Most discussion takes place on the mailing list
 link:http://lists.jboss.org/mailman/listinfo/undertow-dev[http://lists.jboss.org/mailman/listinfo/undertow-dev].
 
-We also hang on on Freenode in #undertow.
+We also hang out on Freenode in #undertow.
 
 Report a bug
 ~~~~~~~~~~~~
