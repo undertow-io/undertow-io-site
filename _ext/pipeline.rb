@@ -7,6 +7,7 @@ require 'less_config'
 require 'graphviz'
 require 'docindexer'
 require 'breadcrumbs'
+require 'bootstrap-sass'
 
 Awestruct::Extensions::Pipeline.new do
   extension Docindexer.new
