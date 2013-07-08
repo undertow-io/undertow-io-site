@@ -1,0 +1,72 @@
+---
+layout: project-blog
+---
+
+Undertow 1.0.0.Beta1 Released
+=============================
+
+Undertow is a high performance non-blocking webserver that is the new web server in Wildfly.
+
+Some notable features include:
+
+ * HTTP upgrade support - This enables management and EJB invocations to be multiplexed over the web port without any performance loss
+ * Websocket support, including JSR-356
+ * Servlet 3.1 support
+ * Ability to mix non-blocking handlers with Servlet
+
+Undertow is completely standalone, starts in milliseconds, and has a fluent builder API for building deployments. This all makes it well suited for use in unit tests. An example of setting up an embedded servlet deployment is shown below:
+
+One of the goals of Undertow was to have great performance and I am happy to say so far we have surpassed our own expectations. Against the competition Undertow comes out ahead on every internal test we have run, and this is also represented in a third party benchmark by Tech Empower (the benchmarks that were posted to the core a while back), where it comes in as the fastest Java web server (and in many of the tests as the fastest server overall).
+
+The results are listed here:
+
+ * http://www.techempower.com/benchmarks/#section=data-r6&hw=ec2&test=plaintext
+ * http://www.techempower.com/benchmarks/#section=data-r6&hw=i7&test=plaintext
+ * http://www.techempower.com/benchmarks/#section=data-r6&hw=ec2&test=json
+ * http://www.techempower.com/benchmarks/#section=data-r6&hw=i7&test=json
+
+If anyone want to participate the dev list is undertow-dev@lists.jboss.org and we hang out on #undertow on freenode.
+
+Some examples
+-------------
+
+.Embedded Servlet Deployment
+[source,java]
+----
+DeploymentInfo servletBuilder = deployment()
+        .setClassLoader(ServletServer.class.getClassLoader())
+        .setContextPath("/myapp")
+        .setDeploymentName("test.war")
+        .addServlets(
+                servlet("MessageServlet", MessageServlet.class)
+                        .addInitParam("message", "Hello World")
+                        .addMapping("/*"),
+                servlet("MyServlet", MessageServlet.class)
+                        .addInitParam("message", "MyServlet")
+                        .addMapping("/myservlet"));
+
+DeploymentManager manager = defaultContainer().addDeployment(servletBuilder);
+manager.deploy();
+
+Undertow server = Undertow.builder()
+        .addListener(8080, "localhost")
+        .setHandler(manager.start())
+        .build();
+server.start();
+----
+
+.Simple non-blocking handler
+[source,java]
+----
+Undertow server = Undertow.builder()
+        .addListener(8080, "localhost")
+        .setHandler(new HttpHandler() {
+            @Override
+            public void handleRequest(final HttpServerExchange exchange) throws Exception {
+                exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
+                exchange.getResponseSender().send("Hello World");
+            }
+        }).build();
+server.start();
+----
+

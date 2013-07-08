@@ -14,6 +14,8 @@ layout: project
 				%ul.nav
 					%li{:class=>"#{'active' if page.output_path.start_with?('/index') }" }<
 						%a(href="#{site.base_url}/index.html") Home
+					%li{:class=>"#{'active' if page.output_path.start_with?('/blog') }" }<
+						%a(href="#{site.base_url}/blog/index.html") Blog
 					%li{:class=>"#{'active' if page.output_path.start_with?('/downloads') }" }<
 						%a(href="#{site.base_url}/downloads.html") Download
 					%li{:class=>"#{'active' if page.output_path.start_with?('/docs') }" }<
