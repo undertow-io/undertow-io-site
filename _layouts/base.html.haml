@@ -15,6 +15,25 @@
     /[if lt IE 9]
       %script{ :type=>'text/javascript', :src=>'//html5shim.googlecode.com/svn/trunk/html5.js' }
   %body
+
+    %link(rel="shortcut icon" href="#{site.project_images_url}/favicon.ico")
+    %link(rel="apple-touch-icon-precomposed" sizes="144x144" href="#{site.project_images_url}/apple-touch-icon-144x144-precomposed.png")
+    %link(rel="apple-touch-icon-precomposed" sizes="114x114" href="#{site.project_images_url}/apple-touch-icon-114x114-precomposed.png")
+    %link(rel="apple-touch-icon-precomposed" sizes="72x72" href="#{site.project_images_url}/apple-touch-icon-72x72-precomposed.png")
+    %link(rel="apple-touch-icon-precomposed" href="#{site.project_images_url}/apple-touch-icon-precomposed.png")
+
+    :css
+      @media (min-width: 980px) {
+        .banner { background-image: url(#{site.project_images_url}/undertow-banner.png); height: 110px;  }
+      }
+      @media (max-width: 979px) {
+        .banner { background-image: url(#{site.project_images_url}/undertow_logo-stacked_600px.png); background-repeat:no-repeat; height: 60px; }
+      }
+      @media (max-width: 650px) {
+        .banner { width: 200px; margin: 0px auto; }
+      }
+
+
     .navbar.navbar-fixed-top
       .navbar-inner
         .container
