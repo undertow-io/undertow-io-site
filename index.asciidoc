@@ -20,7 +20,7 @@ handlers. The gives you the flexibility to choose between a full Java EE servlet
 handler, to anything in between.
 
 Undertow is designed to be fully embeddable, with easy to use fluent builder APIs. Undertow's lifecycle is completely
-controlled by the embeding application.
+controlled by the embedding application.
 
 Undertow is sponsored by JBoss and is the default web server in the link:https://github.com/wildfly/wildfly[Wildfly Application Server].
 
@@ -59,7 +59,7 @@ public class HelloWorldServer {
 
     public static void main(final String[] args) {
         Undertow server = Undertow.builder()
-                .addListener(8080, "localhost")
+                .addHttpListener(8080, "localhost")
                 .setHandler(new HttpHandler() {
                     @Override
                     public void handleRequest(final HttpServerExchange exchange) throws Exception {
