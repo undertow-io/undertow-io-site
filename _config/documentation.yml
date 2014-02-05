@@ -14,8 +14,8 @@ documentation:
                     label: Bootstrapping Undertow
                     url: bootstrapping.html
                 -
-                    label: Undertow Architecture Overview
-                    url: undertow-overview.html
+                    label: Architecture Overview
+                    url: overview.html
                 -
                     label: Listeners
                     url: listeners.html

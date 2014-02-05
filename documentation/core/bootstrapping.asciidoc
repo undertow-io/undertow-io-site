@@ -59,6 +59,10 @@ The builder will try and pick sensible defaults for all performance related para
 buffer sizes, however all these can be overridden directly using the builder. These options and their effects are
 detailed in the link:listeners.html[listeners guide], and will not be repeated here.
 
+Note that because of the flexibility of Undertow there are likely several general purpose handlers that you will always
+want to include in your server (e.g. the date handler, that adds a date header to all responses). For more information
+see the link:undertow-handler-guide.html[handlers guide].
+
 Assembling a Server Manually
 ----------------------------
 
@@ -127,4 +131,4 @@ the builder does not:
 - Buffer pools can be shared between different server instances
 - Listeners can be given different root handlers
 
-In most cases this level of control is not nessesary, and it is better to simply use the builder API.
+In most cases this level of control is not necessary, and it is better to simply use the builder API.
