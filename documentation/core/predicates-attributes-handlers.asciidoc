@@ -14,3 +14,114 @@ Stuart Douglas
 
 Predicates Attributes and Handlers
 ----------------------------------
+
+
+Introduction
+~~~~~~~~~~~~
+
+Predicates and Exchange attributes are an abstraction that allow handlers to read, write and make decisions based on
+certain attributes of a request without hard coding this into the handler. These form the basis of Undertow's text
+based handler configuration format.
+
+Exchange Attributes
+^^^^^^^^^^^^^^^^^^^
+
+An exchange attribute represents the value of part of the exchange. For example the path attribute represents the
+request path, the method attribute represents the HTTP. Even though these attributes can be retrieved and modified
+directly this requires a handler to hard code the attribute that they wish to use. For example Undertow provides a
+handler that checks an attribute against an access control list. There are lots of different attributes we may wish
+to check against the ACL (e.g. username, User-Agent header, request path).
+
+Predicates
+^^^^^^^^^^
+
+A predicate is a function that takes a value (in this case the `HttpServerExchange`) and returns a true or false value.
+This allows actions to be taken based on the return value of the predicate. In general any handler that needs to make
+a boolean decision based on the exchange should use a predicate to allow for maximum flexibility.
+
+The provided predicate handler can be used to make a decision between which handler to invoke based on the value of a
+predicate.
+
+Programmatic Representation
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Exchange Attributes
+^^^^^^^^^^^^^^^^^^^
+
+An exchange attribute is represented by the `io.undertow.attribute.ExchangeAttribute` interface:
+
+[source,java]
+----
+
+/**
+ * Representation of a string attribute from a HTTP server exchange.
+ */
+public interface ExchangeAttribute {
+
+    /**
+     * Resolve the attribute from the HTTP server exchange. This may return null if the attribute is not present.
+     * @param exchange The exchange
+     * @return The attribute
+     */
+    String readAttribute(final HttpServerExchange exchange);
+
+    /**
+     * Sets a new value for the attribute. Not all attributes are writable.
+     * @param exchange The exchange
+     * @param newValue The new value for the attribute
+     */
+    void writeAttribute(final HttpServerExchange exchange, final String newValue) throws ReadOnlyAttributeException;
+}
+
+----
+
+Undertow provides implementation of a lot of attributes out of the box, most of which can be accessed using the
+`io.undertow.attribute.ExchangeAttributes` utility class. Some of the attributes that are provided include request and
+response headers, cookies, path, query parameters, the current user and more.
+
+Predicates
+^^^^^^^^^^
+
+Predicates are represented by the `io.undertow.predicate.Predicate` interface:
+
+[source,java]
+----
+/**
+ * A predicate.
+ *
+ * This is mainly uses by handlers as a way to decide if a request should have certain
+ * processing applied, based on the given conditions.
+ */
+public interface Predicate {
+
+    /**
+     * Attachment key that can be used to store additional predicate context that allows the predicates to store
+     * additional information. For example a predicate that matches on a regular expression can place additional
+     * information about match groups into the predicate context.
+     *
+     * Predicates must not rely on this attachment being present, it will only be present if the predicate is being
+     * used in a situation where this information may be required by later handlers.
+     *
+     */
+    AttachmentKey<Map<String, Object>> PREDICATE_CONTEXT = AttachmentKey.create(Map.class);
+
+    boolean resolve(final HttpServerExchange value);
+
+}
+----
+
+Undertow provides built in predicates that can be created using the `io.undertow.predicate.Predicates` utility class.
+This includes basic boolean logic predicates (and, or and not), as well as other useful predicates such as path
+matching (including prefix and suffix based matches), regular expression matching, contains and exists. Many of these
+predicates operate on exchange attributes, so they can be used to match arbitrary parts of the exchange. The following
+example demonstrates a predicate that matches any exchange that has no Content-Type header where the method is POST:
+
+[source,java]
+----
+Predicate predicate = Predicates.and(
+        Predicates.not(Predicates.exists(ExchangeAttributes.requestHeader(Headers.CONTENT_TYPE))),
+        Predicates.equals("POST", ExchangeAttributes.requestMethod()));
+----
+
+Textual Representation
+~~~~~~~~~~~~~~~~~~~~~~
