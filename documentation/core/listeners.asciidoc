@@ -95,7 +95,7 @@ The charset to use to decode the URL and query parameters. Defaults to UTF-8.
 
 DECODE_URL::
 
-Determins if the listener will decode the URL and query parameters, or simply pass it through to the handler chain as
+Determines if the listener will decode the URL and query parameters, or simply pass it through to the handler chain as
 is. If this is set url encoded characters will be decoded to the charset specified in URL_CHARSET. Defaults to true.
 
 ALLOW_ENCODED_SLASH::
