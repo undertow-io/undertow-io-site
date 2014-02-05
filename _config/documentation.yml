@@ -1,21 +1,52 @@
 
 documentation:
-  label: Documentation
-  url: documentation/
-  children:
-    -
-      label: Undertow Handler Authors Guide
-      url: undertow-handler-guide.html
-    -
-      label: Design Document
-      url: undertow-design-doc.html
-    -
-      label: Request Lifecycle
-      url: undertow-request-lifecycle.html
-    -
-      label: Servlet
-      url: servlet/
-      children:
+    label: Documentation
+    url: documentation/
+    children:
         -
-          label: Using non-blocking handlers with servlet deployments
-          url: using-non-blocking-handlers-with-servlet.html
+            label: Undertow Core
+            url: core/
+            children:
+                -
+                    label: Introduction
+                    url: introduction.html
+                -
+                    label: Undertow Architecture Overview
+                    url: undertow-overview.html
+                -
+                    label: Bootstrapping Undertow
+                    url: bootstrapping.html
+                -
+                    label: Listeners
+                    url: listeners.html
+                -
+                    label: Built In Handlers
+                    url: built-in-handlers.html
+                -
+                    label: Handler Authors Guide
+                    url: undertow-handler-guide.html
+                -
+                    label: Request Lifecycle
+                    url: undertow-request-lifecycle.html
+                -
+                    label: Error Handling
+                    url: error-handling.html
+                -
+                    label: Security
+                    url: security.html
+                -
+                    label: Predicates, Attributes and Handlers
+                    url: predicates-attributes-handlers.html
+                -
+                    label: Reverse Proxy
+                    url: reverse-proxy.html
+                -
+                    label: Websockets
+                    url: websockets.html
+        -
+            label: Servlet
+            url: servlet/
+            children:
+                -
+                    label: Using non-blocking handlers with servlet deployments
+                    url: using-non-blocking-handlers-with-servlet.html

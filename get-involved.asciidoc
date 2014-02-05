@@ -3,7 +3,7 @@ layout: project-nav
 ---
 
 Get Involved
-============
+------------
 
 Get Involved
 ~~~~~~~~~~~~

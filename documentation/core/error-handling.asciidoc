@@ -1,0 +1,16 @@
+---
+title: Error Handling
+layout: doc
+---
+
+
+Error Handling
+==============
+Stuart Douglas
+:Author:    Stuart Douglas
+:Email:     <sdouglas@redhat.com>
+:Date:      2014
+:Revision:  1.0
+
+Error Handling
+--------------

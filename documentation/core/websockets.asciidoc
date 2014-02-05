@@ -1,0 +1,16 @@
+---
+title: Websockets
+layout: doc
+---
+
+
+Websockets
+==========
+Stuart Douglas
+:Author:    Stuart Douglas
+:Email:     <sdouglas@redhat.com>
+:Date:      2014
+:Revision:  1.0
+
+Websockets
+----------

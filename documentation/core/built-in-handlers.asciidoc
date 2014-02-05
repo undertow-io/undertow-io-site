@@ -1,0 +1,16 @@
+---
+title: Built in Handlers
+layout: doc
+---
+
+
+Built in Handlers
+=================
+Stuart Douglas
+:Author:    Stuart Douglas
+:Email:     <sdouglas@redhat.com>
+:Date:      2014
+:Revision:  1.0
+
+Built in Handlers
+-----------------

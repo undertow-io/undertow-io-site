@@ -1,0 +1,16 @@
+---
+title: Predicates, Attributes and Handlers
+layout: doc
+---
+
+
+Predicates Attributes and Handlers
+==================================
+Stuart Douglas
+:Author:    Stuart Douglas
+:Email:     <sdouglas@redhat.com>
+:Date:      2014
+:Revision:  1.0
+
+Predicates Attributes and Handlers
+----------------------------------

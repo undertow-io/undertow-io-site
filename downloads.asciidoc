@@ -4,9 +4,14 @@ layout: project-nav
 
 Downloads
 =========
+Stuart Douglas
+:Author:    Stuart Douglas
+:Email:     <sdouglas@redhat.com>
+:Date:      2013
+:Revision:  0.1
 
 Downloads
-~~~~~~~~~
+---------
 
 The easiest way to get started using Undertow is to download the
 link:http://www.wildfly.org/download/[Wildfly Application Server].
