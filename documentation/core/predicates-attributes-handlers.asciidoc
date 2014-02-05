@@ -172,7 +172,15 @@ attributes provided by Undertow is below:
 |Value from the predicate context                                             |          | `${name}`
 |==========================
 
-Any tokens that do not follow one of the above patterns are assumed to be literals.
+Any tokens that do not follow one of the above patterns are assumed to be literals. For example assuming a
+user name of 'Stuart' and a request method of 'GET' the attribute text `Hello %u the request method is %m` will give
+the value +Hello Stuart the request method is GET+.
+
+These attributes are used anywhere that text based configuration is required, e.g. specifying the log pattern in the
+access log.
+
+Some handlers may actually modify these attributes. In order for this to work the attribute must not be read only, and
+must consist of only a single token from the above table.
 
 
 
