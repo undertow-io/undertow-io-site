@@ -68,10 +68,10 @@ Assembling a Server Manually
 
 If you do not want to use the builder API then there are a few steps that you need to follow to create a server:
 
-# Create an XNIO Worker
-# Create an XNIO SSL instance (optional)
-# Create an instance of the relevant Undertow listener class
-# Open a server socket using XNIO and set its accept listener
+. Create an XNIO Worker
+. Create an XNIO SSL instance (optional)
+. Create an instance of the relevant Undertow listener class
+. Open a server socket using XNIO and set its accept listener
 
 The code for HTTP, HTTPS and AJP listeners is shown below:
 

@@ -5,7 +5,7 @@ layout: doc
 
 
 Architecture Overview
-==============================
+=====================
 Stuart Douglas
 :Author:    Stuart Douglas
 :Email:     <sdouglas@redhat.com>
@@ -91,7 +91,7 @@ together to form a complete server.
 
 The HttpHandler interface is quite simple:
 
-[code,java]
+[source,java]
 ----
 public interface HttpHandler {
 
@@ -104,7 +104,7 @@ Handlers are generally chained together by explicitly specifying the next handle
 typical handler might look something like this:
 
 
-[code,java]
+[source,java]
 ----
 public class SetHeaderHandler implements HttpHandler {
 
