@@ -125,3 +125,54 @@ Predicate predicate = Predicates.and(
 
 Textual Representation
 ~~~~~~~~~~~~~~~~~~~~~~
+
+WARNING: Undertows predicate language is still considered tech preview. Its syntax will likely change in a future version
+as the language is expanded.
+
+All these attributes and predicates are all well and good, but unless there is a way for the end user to configure them
+without resorting to programmatic means they are not super useful. Fortunately Undertow provides a way to do just that.
+
+Exchange Attributes
+^^^^^^^^^^^^^^^^^^^
+
+Exchange attributes may have up to two textual representations, a long one and a short one. The long version takes the
+form %{attribute}, while the short version is a percent sign followed by a single character. A list of the built in
+attributes provided by Undertow is below:
+
+[frame="topbot",options="header"]
+|==========================
+|Attribute                                                                    |Short Form|Long Form
+|Remote IP address                                                            | `%a`     | `%{REMOTE_IP}`
+|Local IP address                                                             | `%A`     | `%{LOCAL_IP}`
+|Bytes sent, excluding HTTP headers, or '-' if no bytes were sent             | `%b`     |
+|Bytes sent, excluding HTTP headers                                           | `%B`     | `%{BYTES_SENT}`
+|Remote host name                                                             | `%h`     |
+|Request protocol                                                             | `%H`     | `%{PROTOCOL}`
+|Remote logical username from identd (always returns '-')                     | `%l`     |
+|Request method                                                               | `%m`     | `%{METHOD}`
+|Local port                                                                   | `%p`     | `%{LOCAL_PORT}`
+|Query string (prepended with a '?' if it exists, otherwise an empty string)  | `%q`     | `%{QUERY_STRING}`
+|First line of the request                                                    | `%r`     | `%{REQUEST_LINE}`
+|HTTP status code of the response                                             | `%s`     | `%{RESPONSE_CODE}`
+|Date and time, in Common Log Format format                                   | `%t`     | `%{DATE_TIME}`
+|Remote user that was authenticated                                           | `%u`     | `%{REMOTE_USER}`
+|Requested URL path                                                           | `%U`     | `%{REQUEST_URL}`
+|Request relative path                                                        | `%R`     | `%{RELATIVE_PATH}`
+|Local server name                                                            | `%v`     | `%{LOCAL_SERVER_NAME}`
+|Time taken to process the request, in millis                                 | `%D`     | `%{RESPONSE_TIME}`
+|Time taken to process the request, in seconds                                | `%T`     |
+|Current request thread name                                                  | `%I`     | `%{THREAD_NAME}`
+|SSL cypher                                                                   |          | `%{SSL_CIPHER}`
+|SSL client certificate                                                       |          | `%{SSL_CLIENT_CERT}`
+|SSL session id                                                               |          | `%{SSL_SESSION_ID}`
+|Cookie value                                                                 |          | `%{c,cookie_name}`
+|Query parameter                                                              |          | `%{q,query_param_name}`
+|Request header                                                               |          | `%{i,request_header_name}`
+|Response header                                                              |          | `%{o,response_header_name}`
+|Value from the predicate context                                             |          | `${name}`
+|==========================
+
+Any tokens that do not follow one of the above patterns are assumed to be literals.
+
+
+
