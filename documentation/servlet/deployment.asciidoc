@@ -1,0 +1,19 @@
+---
+title: Deployment
+layout: doc
+---
+
+
+Creating a Servlet Deployment
+=============================
+Stuart Douglas
+:Author:    Stuart Douglas
+:Email:     <sdouglas@redhat.com>
+:Date:      2014
+:Revision:  1
+
+Creating a Servlet Deployment
+-----------------------------
+
+
+

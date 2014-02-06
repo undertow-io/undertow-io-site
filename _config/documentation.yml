@@ -48,5 +48,17 @@ documentation:
             url: servlet/
             children:
                 -
-                    label: Using non-blocking handlers with servlet deployments
+                    label: Introduction
+                    url: introduction.html
+                -
+                    label: Creating a Servlet Deployment
+                    url: deployment.html
+                -
+                    label: Servlet Extensions
+                    url: servlet-extensions.html
+                -
+                    label: Combining Undertow Handlers and Servlet
                     url: using-non-blocking-handlers-with-servlet.html
+                -
+                    label: Advanced Options
+                    url: advanced-options.html
