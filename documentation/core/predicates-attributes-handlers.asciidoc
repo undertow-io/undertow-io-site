@@ -182,5 +182,68 @@ access log.
 Some handlers may actually modify these attributes. In order for this to work the attribute must not be read only, and
 must consist of only a single token from the above table.
 
+Predicates
+^^^^^^^^^^
+
+Sometimes it is also useful to have a textual representation of a predicate. For examples when configuring a handler
+in Wildfly we may want it only to run if a certain condition is met, and when doing rewrite handling we generally do
+not want to re-write all requests, only a subset of them.
+
+To this end Undertow provides a way to specify a textual representation of a predicate. In its simplest form, a
+predicate is represented as `predicate-name[name1=value1,name2=value2]`.
+
+For example, the following predicates all match POST requests:
+
+[code]
+----
+method[POST]
+method[value=POST]
+equals[{%{METHOD}, POST}]
+equals[%m, "POST"]
+regex[pattern="POST", value="%m", full-match=true]
+----
+
+Lets examine these a bit more closely. The first one `method[POST]` uses the built in method predicate that matches
+based on the method. As this predicate takes only a single parameter (that is the default parameter) it is not necessary
+to explicitly specify the parameter name. Also note that POST is not quoted, quoting is only necessary if the token
+contains spaces, commas or square braces.
+
+The second example `method[value=POST]` is the same as the first, except that the parameter name is explicitly specified.
+
+The third and fourth examples demonstrates the 'equals' predicate. This predicate actually takes one parameter that is an
+array, and will return true if all items in the array are equal. Arrays are generally enclosed in curly braces, however in
+this case where there is a single parameter that is the default parameter the braces can be omitted.
+
+The final examples shows the use of the regex predicate. This takes 3 parameters, the pattern to match, the value to
+match against and full-match, which determines if the pattern must match the whole value or simply part of it.
+
+Some predicates may also capture additional information about the match and store it in the predicate context. For
+example the regex predicate will store the match under the key '0', and any match groups under the key '1', '2' etc.
+
+These contextual values can then be retrieved by later predicates of handlers using the syntax `${0}`, `${1}` etc.
+
+Predicates can be combined using the boolean operators 'and', 'or' and not. Some examples are shown below:
 
 
+[code]
+----
+not method[POST]
+method[POST] and path-prefix["/uploads"]
+path-template[value="/user/{username}/*"] and equals[%u, ${username}]
+regex[pattern="/user/(.*?)./.*", value=%U, full-match=true] and equals[%u, ${1}]
+----
+
+The first predicate will match everything except post requests. The second will match all post requests to /uploads.
+The third predicate will match all requests to URL's of the form /user/{username}/* where the username is equal to the
+username of the currently logged in user. In this case the username part of the URL is captured, and the equals handler
+can retrieve it using the `${username}` syntax shown above. The fourth example is the same as the third, however it uses
+a regex with a match group rather than a path template.
+
+The complete list of built in predicates is shown below:
+
+
+[frame="topbot",options="header"]
+|==========================
+|Name       | Parameters                | Parameter Types       | Default Parameter | Optional Parameters | Additional context
+|contains   | value, search             | attribute, String[]   |                   |                     |
+|equals 
