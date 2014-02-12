@@ -1,0 +1,53 @@
+---
+title: Servlet Security
+layout: doc
+---
+
+
+Servlet Security
+================
+Stuart Douglas
+:Author:    Stuart Douglas
+:Email:     <sdouglas@redhat.com>
+:Date:      2014
+:Revision:  1
+
+Servlet Security
+----------------
+
+As well as support for the standard servlet spec required authentication mechanisms, Undertow also allows you to create
+your own mechanisms, and provides an easy way to make the accessible to an end user.
+
+Securing A Servlet Deployment
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Undertow provides full support for all security constructs specified in the Servlet specification. These are configured
+via the DeploymentInfo structure, and in general closely mirror the corresponding structures as defined by annotations
+or +web.xml+. These structures are not detailed fully here, but are covered by the relevant javadoc.
+
+Selecting an Authentication Mechanism
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The authentication mechanism is specified via the `io.undertow.servlet.api.LoginConfig` object that can be added using
+the method `DeploymentInfo.setLoginConfig(LoginConfig config)`. This object contains an ordered list of mechanism names.
+The Servlet specification only allows you to specify a single mechanism name, while Undertow allows as many as you want
+(if you are using Wildfly you can make use of this by using a comma separated list of names in web.xml, and pass
+properties using a query string like syntax, for example `BASIC?silent=true,FORM`).
+
+The mechanisms are standard Undertow `AuthenticationMechanism` implementations, and it should be noted that not all
+mechanisms are compatible. For example trying to combine FORM and BASIC does not work, just because they both require
+a different response code. Combining FORM and silent BASIC will work just fine however (silent basic auth means that
+if the user agent provides an `Authorization:` header then BASIC auth will be used, however if this header is not
+present then no action will be taken. This allows scripts to use basic auth, while browsers can use form).
+
+When adding the mechanism name to the `LoginConfig` structure it is also possible to specify a property map. Custom
+authentication mechanisms may use these properties however they wish. The only built in mechanim that makes use of this
+mechanism is basic auth, which if passed `Collections.singletonMap("silent", "true")` will enable silent mode as
+described above.
+
+Adding a Custom Authentication Mechanism
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+
