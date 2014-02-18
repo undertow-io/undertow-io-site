@@ -39,12 +39,12 @@ Basically Undertow is a web server, while netty is a framework to make writing n
 Why isn't Undertow based in Netty?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-Because we don't need it. Netty is designed to make network programming easier, but at the expense of another later of
+Because we don't need it. Netty is designed to make network programming easier, but at the expense of another layer of
 abstraction. Given that network programming is a large part of what makes up a HTTP server it does not make sense to
 add in another layer of abstraction just to make things a bit easier (and given how much API breakage occurred between
-Netty 3 and Netty 4 it quite possible that it would not have made things any easier anyway).
+Netty 3 and Netty 4 it is quite possible that it would not have made things any easier anyway).
 
-Undertow is aiming to be the fastest web server around, and adding an extra layer of abstraction would not help in that
+Undertow is aiming to be the fastest web server around, and adding an additional layer of indirection would not help in that
 goal.
 
 
