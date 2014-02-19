@@ -62,3 +62,6 @@ documentation:
                 -
                     label: Advanced Options
                     url: advanced-options.html
+        -
+            label: FAQ 
+            url: faq.html 
