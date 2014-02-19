@@ -11,4 +11,5 @@ gem 'therubyrhino', '~> 1.73', :platforms => :jruby # JavaScript on JRuby
 gem 'htmlcompressor', '~> 0.0.3' # Adds in HTML minification, helps remove the warning on awestruct startup
 
 gem 'asciidoctor', '~> 0.1.1'
+gem 'listen', '0.7.3'
 gem 'bootstrap-sass'
