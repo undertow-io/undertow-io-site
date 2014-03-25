@@ -26,6 +26,7 @@ Lets get started. First we need a `ServletExtension` implementation:
 ----
 package io.undertow.example.nonblocking;
 
+import io.undertow.Handlers;
 import io.undertow.server.HandlerWrapper;
 import io.undertow.server.HttpHandler;
 import io.undertow.server.handlers.PathHandler;
@@ -39,9 +40,9 @@ public class NonBlockingHandlerExtension implements ServletExtension {
         deploymentInfo.addInitialHandlerChainWrapper(new HandlerWrapper() {
             @Override
             public HttpHandler wrap(final HttpHandler handler) {
-                return new PathHandler()
-                        .addPath("/", handler)
-                        .addPath("/hello", new HelloWorldHandler());
+                return Handlers.path()
+                        .addPrefixPath("/", handler)
+                        .addPrefixPath("/hello", new HelloWorldHandler());
             }
         });
     }
