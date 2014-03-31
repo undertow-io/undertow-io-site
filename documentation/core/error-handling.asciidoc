@@ -29,7 +29,7 @@ Exceptions
 
 The easiest way to handle exceptions is to catch them in an outer handler. For example:
 
-[code,java]
+[source,java]
 ----
 public class ErrorHandler implements HttpHandler {
 
@@ -65,7 +65,7 @@ that they are registered, so the last handler registered is the first to be call
 
 The following example shows a handler that will generate a simple next based error page for 500 errors:
 
-[code,java]
+[source,java]
 ----
 
 public class SimpleErrorPageHandler implements HttpHandler {

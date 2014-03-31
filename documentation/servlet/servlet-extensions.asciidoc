@@ -33,6 +33,8 @@ has the same amount of flexibility that you have when using Undertow in embedded
 Examples
 --------
 
+link:deployment.html[The deployment guide] contains examples of how to use the `DeploymentInfo` API.
+
 link:using-non-blocking-handlers-with-servlet.html[Using non-blocking handlers with Servlet deployments]
 
 

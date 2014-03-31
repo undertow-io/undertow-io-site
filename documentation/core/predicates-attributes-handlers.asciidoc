@@ -194,7 +194,7 @@ predicate is represented as `predicate-name[name1=value1,name2=value2]`.
 
 For example, the following predicates all match POST requests:
 
-[code]
+[source]
 ----
 method[POST]
 method[value=POST]
@@ -225,7 +225,7 @@ These contextual values can then be retrieved by later predicates of handlers us
 Predicates can be combined using the boolean operators 'and', 'or' and not. Some examples are shown below:
 
 
-[code]
+[source]
 ----
 not method[POST]
 method[POST] and path-prefix["/uploads"]

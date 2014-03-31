@@ -48,9 +48,6 @@ documentation:
             url: servlet/
             children:
                 -
-                    label: Introduction
-                    url: introduction.html
-                -
                     label: Creating a Servlet Deployment
                     url: deployment.html
                 -
@@ -59,9 +56,6 @@ documentation:
                 -
                     label: Combining Undertow Handlers and Servlet
                     url: using-non-blocking-handlers-with-servlet.html
-                -
-                    label: Advanced Options
-                    url: advanced-options.html
         -
             label: FAQ 
             url: faq.html 
