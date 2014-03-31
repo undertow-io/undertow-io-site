@@ -41,12 +41,23 @@ if the user agent provides an `Authorization:` header then BASIC auth will be us
 present then no action will be taken. This allows scripts to use basic auth, while browsers can use form).
 
 When adding the mechanism name to the `LoginConfig` structure it is also possible to specify a property map. Custom
-authentication mechanisms may use these properties however they wish. The only built in mechanim that makes use of this
+authentication mechanisms may use these properties however they wish. The only built in mechanism that makes use of this
 mechanism is basic auth, which if passed `Collections.singletonMap("silent", "true")` will enable silent mode as
 described above.
 
+The built in mechanisms are FORM, DIGEST, CLIENT_CERT and BASIC.
+
 Adding a Custom Authentication Mechanism
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Custom authentication mechanisms are added using the Undertow `ServletExtension` mechanism. This provides a way
+to hook into the Undertow deployment process, and add any additional mechanisms.
+
+These extensions are discovered via the standard META-INF/services discovery mechanism, so if you have a jar that
+provides a custom authentication mechanism all that should be required is to add this jar to your deployment and
+then specify the mechanism name in web.xml.
+
+For more info see the link:servlet-extensions.html:[Servlet extensions guide].
 
 
 
