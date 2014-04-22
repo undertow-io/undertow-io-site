@@ -28,7 +28,10 @@ This method is passed an Undertow `DeploymentInfo` structure, which contains a c
 deployment, my modifying this structure it is possible to change any aspect of the deployment.
 
 The DeploymentInfo structure is the same structure that is used by the embedded API, so in effect a ServletExtension
-has the same amount of flexibility that you have when using Undertow in embedded more.
+has the same amount of flexibility that you have when using Undertow in embedded mode.
+
+There are many possible use cases for this, a common one would be to add additional authentication mechanisms to a
+deployment, or to use native Undertow handlers as part of a Servlet deployment.
 
 Examples
 --------
