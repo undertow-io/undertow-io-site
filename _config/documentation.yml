@@ -56,6 +56,12 @@ documentation:
                 -
                     label: Combining Undertow Handlers and Servlet
                     url: using-non-blocking-handlers-with-servlet.html
+                -
+                    label: Servlet Security
+                    url: security.html
+                -
+                    label: Advanced Usages
+                    url: advanced.html
         -
             label: FAQ 
             url: faq.html 
