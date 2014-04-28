@@ -23,6 +23,11 @@ What JDK does Undertow require?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Java 6 or later.
 
+Why am I only seeing one request being processed at a time?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Some browsers share connections between tabs, so even if you have opened another tab the second tab will not load until the first tab has completed.
+
+
 When will Undertow be included in JBoss EAP?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 Undertow is currently planned for EAP7, which will be based on a future WildFly release. It can be used today on its own or within WindFly 8.
