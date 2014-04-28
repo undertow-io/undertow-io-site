@@ -5,7 +5,7 @@ layout: doc
 
 
 Advanced Options
-=============================
+================
 Stuart Douglas
 :Author:    Stuart Douglas
 :Email:     <sdouglas@redhat.com>
