@@ -18,7 +18,7 @@ Servlet Security
 As well as support for the standard servlet spec required authentication mechanisms, Undertow also allows you to create
 your own mechanisms, and provides an easy way to make the accessible to an end user.
 
-Securing A Servlet Deployment
+Securing a Servlet Deployment
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Undertow provides full support for all security constructs specified in the Servlet specification. These are configured
@@ -46,11 +46,12 @@ The built it list of mechanisms and the properties they take are as follows:
 [frame="topbot",options="header"]
 |==========================
 |Mechanism Name | Options               | Notes       |
-|BASIC          | silent (true/false)   |               |
+|BASIC          | silent (true/false)   | Silent mode means that a challenge will only be issued if an +Authorization+ header with invalid credentials is present. If this header is not present this auth method will never be used. |
 |FORM           |                       |               |
 |CLIENT-CERT    |                       |               |
 |DIGEST         |                       |               |
 |EXTERNAL       |                       | Used when authentication is being done by a front end such as httpd|
+|==========================
 
 
 Selecting an Authentication Mechanism
