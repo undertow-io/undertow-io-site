@@ -104,17 +104,18 @@ will not proceed further, and a new challenge will be sent to the client.
 
 Regardless of if authentication has been flagged as being required when the request reaches the `AuthenticationCallHandler` the
 `SecurityContext` is called to commence the process.  The reason this happens regardless of if authentication is flagged as
-required is for a few reasons: -
-1 - The client may have sent additional authentication tokens and have expectations the response will take these into account.
-2 - We may be able to verify the remote user without any additional rount trips, especially where authentication has already occurred.
-3 - The authentication mechanism may need to pass intermediate updates to the client so we need to ensure any inbound tokens are valid.
+required is for a few reasons:
+
+* The client may have sent additional authentication tokens and have expectations the response will take these into account.
+* We may be able to verify the remote user without any additional rount trips, especially where authentication has already occurred.
+* The authentication mechanism may need to pass intermediate updates to the client so we need to ensure any inbound tokens are valid.
 
 When authentication runs the `authenticate` method on each configured `AuthenticationMechanism` is called in turn, this continues
-until one of the following occurs: -
+until one of the following occurs:
 
-1 - A mechanisms successfully authenticates the request and returns `AUTHENTICATED`.
-2 - A mechanism attempts but does not complete authentication and returns `NOT_AUTHENTICATED`.
-3 - The list of mechanisms is exhausted.
+* A mechanisms successfully authenticates the request and returns `AUTHENTICATED`.
+* A mechanism attempts but does not complete authentication and returns `NOT_AUTHENTICATED`.
+* The list of mechanisms is exhausted.
 
 At this point if the response was `AUTHENTICATED` then the request will be allowed through and passed onto the next handler.
 
