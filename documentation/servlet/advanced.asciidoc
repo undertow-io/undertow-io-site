@@ -94,6 +94,11 @@ To work around this poor practice Undertow provides an option to ignore flushes 
 be activated by calling `DeploymentInfo.setIgnoreFlush(true)`. Even though `flush()` will no longer flush to the
 client when this is enabled Undertow will still treat the response as commited and not allow modification of the headers.
 
+[cols="3,10,2", width="100%"]
+|=======
+|link:security.html[Previous: Servlet Security]| |
+|=======
+
 
 
 

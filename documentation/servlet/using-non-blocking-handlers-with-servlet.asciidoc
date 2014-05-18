@@ -154,3 +154,8 @@ exchange. In this case we are using a suffix predicate, that will return `true` 
 
 When this predicate returns true our resource handler will be invoked, otherwise the request will be delegated to the servlet
 container as normal.
+
+[cols="3,10,2", width="100%"]
+|=======
+|link:servlet-extensions.html[Previous: Servlet Extensions]| |link:security.html[Next: Servlet Security]
+|=======
