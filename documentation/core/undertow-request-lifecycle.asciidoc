@@ -68,3 +68,8 @@ will be called, and the request will be finished.
 
 - An exception can be thrown. If this propagates all the way up the call stack the exchange will be ended with a 500
 response code.
+
+[cols="3,12,2", width="100%"]
+|=======
+|link:undertow-handler-guide.html[Previous: Handler Authors Guide]| |link:error-handling.html[Next: Error Handling]
+|=======

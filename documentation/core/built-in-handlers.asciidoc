@@ -120,3 +120,8 @@ Request Limiting Handler::
 
 Handler that limits the number of concurrent requests. If the number exceeds the limit requests are queued. If the
 queue fills up then requests are rejected.
+
+[cols="3,12,3", width="100%"]
+|=======
+|link:listeners.html[Previous: Listeners]| |link:undertow-handler-guide.html[Next: Handler Authors Guide]
+|=======

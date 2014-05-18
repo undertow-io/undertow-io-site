@@ -127,5 +127,9 @@ public class SetHeaderHandler implements HttpHandler {
 
 ----
 
+[cols="4,14,2", width="100%"]
+|=======
+|link:bootstrapping.html[Previous: Bootstrapping Undertow]| |link:listeners.html[Next: Listeners]
+|=======
 
 

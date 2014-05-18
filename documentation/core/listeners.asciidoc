@@ -121,3 +121,8 @@ RECORD_REQUEST_START_TIME::
 If the server should record the start time of a HTTP request. This is necessary if you wish to log or otherwise use
 the total request time, however has a slight performance impact, as it means that `System.nanoTime()` must be called for
 each request. Defaults to false.
+
+[cols="3,10,2" width="100%"]
+|=======
+|link:overview.html[Previous: Architecture Overview]| |link:built-in-handlers.html[Next: Built In Handlers]
+|=======

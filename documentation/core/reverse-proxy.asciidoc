@@ -56,3 +56,9 @@ if they have recovered.
 HTTP Upgrade (including websockets) is fully supported for HTTP based backends. When a HTTP upgrade occurs the
 connection is taken out of the pool and takes on a one to one relationship with the front end connection. Upgraded
 connections to not count towards the backend connection limit.
+
+[cols="5,13,2", width="100%"]
+|=======
+|link:predicates-attributes-handlers.html[Previous: Predicates, Attributes and Handlers]| |link:websockets.html[Next: Websockets]
+|=======
+

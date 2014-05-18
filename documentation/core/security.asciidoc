@@ -130,4 +130,9 @@ not required then the request can proceed to the next handler in the chain and t
 then as with a `NOT_AUTHENTICATED` response each mechanism has `sendChallenge` called in turn to generate an authentication challenge
 to send to the client.
 
+[cols="3,10,4", width="100%"]
+|=======
+|link:error-handling.html[Previous: Error Handling]| |link:predicates-attributes-handlers.html[Next: Predicates, Attributes and Handlers]
+|=======
+
 
