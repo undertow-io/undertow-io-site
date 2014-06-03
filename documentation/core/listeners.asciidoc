@@ -57,7 +57,8 @@ Listener Options
 ~~~~~~~~~~~~~~~~
 
 In addition to the worker options the listeners take some other options that control server behaviour. These are all
-part of the `io.undertow.UndertowOptions` class. Some of of these only make sense for specific connectors:
+part of the `io.undertow.UndertowOptions` class. Some of of these only make sense for specific protocols. You can set
+options with the `Undertow.Builder.setServerOption`:
 
 MAX_HEADER_SIZE::
 
@@ -69,7 +70,8 @@ MAX_ENTITY_SIZE::
 The default maximum size of a request entity. If entity body is larger than this limit then a `java.io.IOException` will
 be thrown at some point when reading the request (on the first read for fixed length requests, when too much data has
 been read for chunked requests). This value is only the default size, it is possible for a handler to override this for
-an individual request by calling `io.undertow.server.HttpServerExchange.setMaxEntitySize(long size)`.
+an individual request by calling `io.undertow.server.HttpServerExchange.setMaxEntitySize(long size)`. Defaults 
+to unlimited.
 
 MAX_PARAMETERS::
 
@@ -104,9 +106,22 @@ If a request comes in with encoded / characters (i.e. %2F), will these be decode
 This can cause security problems (link:http://cve.mitre.org/cgi-bin/cvename.cgi?name=CVE-2007-0450) if a front end
 proxy does not perform the same decoding, and as a result this is disabled by default.
 
+ALLOW_EQUALS_IN_COOKIE_VALUE::
+
+If this is true then Undertow will allow non-escaped equals characters in unquoted cookie values. Unquoted cookie
+values may not contain equals characters. If present the value ends before the equals sign. The remainder of the
+cookie value will be dropped. Defaults to false.
+
+ALWAYS_SET_DATE::
+
+If the server should add a HTTP `Date` header to all response entities which do not already have one.
+The server sets the header right before writing the response, if none was set by a handler before. Unlike
+the `DateHandler` it will not overwrite the header. The current date string is cached, and is updated
+every second. Defaults to true.
+
 ALWAYS_SET_KEEP_ALIVE::
 
-If a HTTP `Keep-Alive` header should always be set, even for HTTP/1.1 requests that are persistent by default. Even
+If a HTTP `Connection: keep-alive` header should always be set, even for HTTP/1.1 requests that are persistent by default. Even
 though the spec does not require this header to always be sent it seems safer to always send it. If you are writing
 some kind of super high performance application and are worried about the extra data being sent over the wire this
 option allows you to turn it off. Defaults to true.
