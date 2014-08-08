@@ -21,7 +21,25 @@ Introduction
 
 Predicates and Exchange attributes are an abstraction that allow handlers to read, write and make decisions based on
 certain attributes of a request without hard coding this into the handler. These form the basis of Undertow's text
-based handler configuration format.
+based handler configuration format. Some examples are shown below:
+
+
+Use the reverse proxy to send all requests to /reports to a different backend server:
+
+[source]
+----
+path-prefix['/reports'] -> reverse-proxy[{'http://reports1.mydomain.com','http://reports2.mydomain.com'}]
+----
+
+Redirect all requests from /a to /b. The first example only redirects if there is an exact match, the later examples
+match all paths that start with /a:
+
+[source]
+----
+path['/a'] -> redirect['/b']
+path-prefix['/a'] -> redirect['/b${remaining}']
+regex['/a(.*)'] -> set[attribute='%{o,Location}', value='/b${1}'] -> response-code[302]
+----
 
 Exchange Attributes
 ^^^^^^^^^^^^^^^^^^^
