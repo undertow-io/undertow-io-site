@@ -21,20 +21,55 @@ Undertow is the default web server in Wildfly, so usage is as simple as deployin
 Maven
 ~~~~~
 
-If you want to embed Undertow then you will most likely want to use Maven. Add the following to your pom.xml:
+If you want to embed Undertow then you will most likely want to use Maven. There are two versions of Undertow
+that are availble for use, the 1.0 and 1.1 branches. It is recommenced that you use the 1.1 branch, even though
+it currently has a Beta tag this Beta tag only applies to new features such as SPDY.
+
+
+Add the following to your pom.xml:
+
 
 [source,xml]
 ----
 <dependency>
     <groupId>io.undertow</groupId>
     <artifactId>undertow-core</artifactId>
-    <version>1.0.1.Final</version>
+    <version>1.1.0.Beta6</version>
 </dependency>
 
 <dependency>
     <groupId>io.undertow</groupId>
     <artifactId>undertow-servlet</artifactId>
-    <version>1.0.1.Final</version>
+    <version>1.1.0.Beta6</version>
+</dependency>
+
+<dependency>
+    <groupId>io.undertow</groupId>
+    <artifactId>undertow-websockets-jsr</artifactId>
+    <version>1.1.0.Beta6</version>
+</dependency>
+----
+
+Or for 1.0:
+
+[source,xml]
+----
+<dependency>
+    <groupId>io.undertow</groupId>
+    <artifactId>undertow-core</artifactId>
+    <version>1.0.15.Final</version>
+</dependency>
+
+<dependency>
+    <groupId>io.undertow</groupId>
+    <artifactId>undertow-servlet</artifactId>
+    <version>1.0.15.Final</version>
+</dependency>
+
+<dependency>
+    <groupId>io.undertow</groupId>
+    <artifactId>undertow-websockets-jsr</artifactId>
+    <version>1.0.15.Final</version>
 </dependency>
 ----
 
