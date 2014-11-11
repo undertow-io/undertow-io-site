@@ -21,12 +21,22 @@ Undertow is the default web server in Wildfly, so usage is as simple as deployin
 Maven
 ~~~~~
 
-If you want to embed Undertow then you will most likely want to use Maven. There are two versions of Undertow
-that are available for use, the 1.0 and 1.1 branches. It is recommenced that you use the 1.1 branch, even though
-it currently has a Beta tag this Beta tag only applies to new features such as SPDY.
+If you want to embed Undertow then you will most likely want to use Maven. There are currently three version branches
+for Undertow:
 
+1.0::
+    This is the original version of Undertow that has support for Java 6, and is the branch that is present in
+    Wildfly 8.0 and 8.1. This branch is no longer actively maintained.
 
-Add the following to your pom.xml:
+1.1::
+    This branch is targeted at Wildfly 8.2. It has many improvements over the 1.1 release series, including support
+    for SPDY and version 1.1 of the websocket specification. It also contains many bug fixes.
+
+1.2::
+    This is the current upstream master branch. At present the only real difference between it and 1.1 is support for
+    HTTP2 and the ability to act as a front end mod_proxy load balancer.
+
+In order to use Undertow you need to add the following artifacts to your pom:
 
 
 [source,xml]
@@ -34,42 +44,42 @@ Add the following to your pom.xml:
 <dependency>
     <groupId>io.undertow</groupId>
     <artifactId>undertow-core</artifactId>
-    <version>1.1.0.Beta7</version>
+    <version>1.2.0.Beta4</version>
 </dependency>
 
 <dependency>
     <groupId>io.undertow</groupId>
     <artifactId>undertow-servlet</artifactId>
-    <version>1.1.0.Beta7</version>
+    <version>1.2.0.Beta4</version>
 </dependency>
 
 <dependency>
     <groupId>io.undertow</groupId>
     <artifactId>undertow-websockets-jsr</artifactId>
-    <version>1.1.0.Beta7</version>
+    <version>1.2.0.Beta4</version>
 </dependency>
 ----
 
-Or for 1.0:
+Or for 1.1:
 
 [source,xml]
 ----
 <dependency>
     <groupId>io.undertow</groupId>
     <artifactId>undertow-core</artifactId>
-    <version>1.0.16.Final</version>
+    <version>1.1.0.CR8</version>
 </dependency>
 
 <dependency>
     <groupId>io.undertow</groupId>
     <artifactId>undertow-servlet</artifactId>
-    <version>1.0.16.Final</version>
+    <version>1.1.0.CR8</version>
 </dependency>
 
 <dependency>
     <groupId>io.undertow</groupId>
     <artifactId>undertow-websockets-jsr</artifactId>
-    <version>1.0.16.Final</version>
+    <version>1.1.0.CR8</version>
 </dependency>
 ----
 

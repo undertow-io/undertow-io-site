@@ -79,7 +79,18 @@ profiles:
     deploy:
       host: undertow@filemgmt.jboss.org
       path: /www_htdocs/undertow
-
+  http2:
+    minified: .min
+    css_minifier: enabled
+    js_minifier: enabled
+    html_minifier: enabled
+    jborg_fonts_url: /cache/static.jboss.org/theme/fonts
+    jborg_images_url: /cache/static.jboss.org/theme/images
+    jborg_js_url: /cache/static.jboss.org/theme/js
+    project_images_url: /cache/static.jboss.org/images/example
+    bootstrap_css_url: /stylesheets/bootstrap-community
+    bootstrap_js_url: /javascripts/bootstrap-community
+    base_url: https://http2.undertow.io
 asciidoc:
     attributes:
       source-highlighter: coderay
