@@ -5,70 +5,107 @@ layout: project-nav
 Undertow
 ========
 Stuart Douglas
-:Author:    Stuart Douglas
-:Email:     <sdouglas@redhat.com>
-:Date:      2013
+:Author:    Jason T. Greene
+:Email:     <jason.greene@redhat.com>
+:Date:      2014
 :Revision:  0.1
 
-Undertow
---------
+Welcome to the Undertow HTTP2 Demo Server!
+------------------------------------------
+++++
+<p style="font-size: 125%;">You are currently connected using the protocol: <b style='color: darkred;' id="transport">checking...</b>.</p>
+<p id="summary" />
+<script>
+    var url = "/";
+    var xhr = new XMLHttpRequest();
 
-Undertow is a flexible performant web server written in java, providing both blocking and non-blocking API's based on NIO.
+    xhr.onreadystatechange = function(e) {
+        if (this.readyState === 4) {
+            var transport = this.status == 200 ? xhr.getResponseHeader("X-Undertow-Transport") : null;
+            transport = transport == null ? "unknown" : transport;
+            document.getElementById("transport").innerHTML = transport;
+            var summary = "In order to view this site with HTTP/2, you need to install one of the clients listed <a href='https://github.com/http2/http2-spec/wiki/Implementations'>here</a>.  Also, you will need to follow the special setup directions linked from that page, as HTTP/2 is often disabled by default.";
+            if (transport.indexOf("h2") == 0) {
+                summary = "Congratulations! Your client is usinng HTTP/2.";
+            }
+            document.getElementById("summary").innerHTML = summary;
+        }
 
-Undertow has a composition based architecture that allows you to build a web server by combining small single purpose
-handlers. The gives you the flexibility to choose between a full Java EE servlet 3.1 container, or a low level non-blocking
-handler, to anything in between.
-
-Undertow is designed to be fully embeddable, with easy to use fluent builder APIs. Undertow's lifecycle is completely
-controlled by the embedding application.
-
-Undertow is sponsored by JBoss and is the default web server in the link:https://github.com/wildfly/wildfly[Wildfly Application Server].
-
-Why Undertow
-------------
-
-Lightweight::
-Undertow is extremely lightweight, with the Undertow core jar coming in at under 1Mb. It is lightweight at runtime
-too, with a simple embedded server using less than 4Mb of heap space.
-
-HTTP Upgrade Support::
-Support for HTTP upgrade, to allow multiple protocols to be multiplexed over the HTTP port.
-
-Web Socket Support::
-Undertow provides full support for Web Sockets, including JSR-356 support.
-
-Servlet 3.1::
-Undertow provides support for Servlet 3.1, including support for embedded servlet. It is also possible to mix both
-Servlets and native undertow non-blocking handlers in the same deployment.
-
-Embeddable::
-Undertow can be embedded in an application or run standalone with just a few lines of code.
-
-Flexible::
-An Undertow server is configured by chaining handlers together. It is possible to add as much or as little functionality
-as you need, so you don't pay for what you are not using.
-
-Show me the code
-----------------
-
-Ok then. Here is a simple Hello World server using Async IO:
-
-[source,java]
-----
-public class HelloWorldServer {
-
-    public static void main(final String[] args) {
-        Undertow server = Undertow.builder()
-                .addHttpListener(8080, "localhost")
-                .setHandler(new HttpHandler() {
-                    @Override
-                    public void handleRequest(final HttpServerExchange exchange) throws Exception {
-                        exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
-                        exchange.getResponseSender().send("Hello World");
-                    }
-                }).build();
-        server.start();
     }
-}
+    xhr.open('HEAD', url, true);
+    xhr.send();
+</script>
+++++
+
+So far, we have verified HTTP/2 interop with the following browsers:
+
+- Chrome Canary (41.0.2217.0)
+- Firefox (Nightly build of 36.01a)
+- Internet Explorer (Windows 10 Preview)
+
+Please report any issues to link:mailto:undertow-dev@lists.jboss.org[the Undertow development mailing list].
+
+Building the Server
+-------------------
+In order to run the server, you first need to build from source. link:http://git-scm.org[Install git], and clone the link:http://github.com/undertow-io/undertow[Undertow repository on github].
+
+[source]
+----
+$  git clone git://github.com/undertow-io/undertow
+Cloning into 'undertow'...
+remote: Counting objects: 52790, done.
+remote: Compressing objects: 100% (701/701), done.
+remote: Total 52790 (delta 346), reused 84 (delta 23)
+Receiving objects: 100% (52790/52790), 13.96 MiB | 1.62 MiB/s, done.
+Resolving deltas: 100% (20443/20443), done.
+Checking connectivity... done.
 ----
 
+Next, you will need to link:http://www.oracle.com/technetwork/java/javase/downloads/java-archive-javase8-2177648.html#jdk-8u20-oth-JPR[install Java 1.8.0_20]. Note that *1.8.0_25 does not work*, but will be supported in the future.
+
+After Java is installed, the latest version of link:http://maven.apache.org[Maven needs to be installed].
+
+Set you JAVA_HOME and verify 1.8.0_20 is properly installed.
+[source,bash]
+----
+$ export JAVA_HOME=/path/to/jdk1.8.0_20
+$ java -version
+java version "1.8.0_20"
+Java(TM) SE Runtime Environment (build 1.8.0_20-b26)
+Java HotSpot(TM) 64-Bit Server VM (build 25.20-b23, mixed mode)
+----
+
+Next, build Undertow using the following maven command:
+[source]
+----
+$ mvn clean install -DskipTests
+.....
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD SUCCESS
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time: 21.775s
+[INFO] Finished at: Wed Nov 12 10:19:21 CST 2014
+[INFO] Final Memory: 66M/828M
+[INFO] ------------------------------------------------------------------------
+----
+
+Running the Server
+------------------
+Launch the HTTP example, by chaning to the examples directory, executing them using maven, and picking option
+'d'.
+[source,bash]
+----
+$ cd examples
+$ mvn exec:exec
+....
+Welcome to the Undertow Examples
+Please select an example:
+a) Basic Authentication
+b) Chat
+c) File Serving
+d) HTTP2
+....
+d
+Running example HTTP2
+Please point your web browser at https://localhost:8443
+----
