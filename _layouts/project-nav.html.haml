@@ -16,6 +16,8 @@ layout: project
 						%a(href="#{site.base_url}/index.html") HTTP2
 					%li{:class=>"#{'active' if page.output_path.start_with?('/home') }" }<
 						%a(href="#{site.base_url}/home.html") Home
+					%li{:class=>"#{'active' if page.output_path.start_with?('/blog') }" }<
+						%a(href="#{site.base_url}/blog/index.html") Blog
 					%li{:class=>"#{'active' if page.output_path.start_with?('/downloads') }" }<
 						%a(href="#{site.base_url}/downloads.html") Download
 					%li{:class=>"#{'active' if page.output_path.start_with?('/docs') }" }<
