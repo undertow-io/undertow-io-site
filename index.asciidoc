@@ -61,18 +61,18 @@ Resolving deltas: 100% (20443/20443), done.
 Checking connectivity... done.
 ----
 
-Next, you will need to link:http://www.oracle.com/technetwork/java/javase/downloads/java-archive-javase8-2177648.html#jdk-8u20-oth-JPR[install Java 1.8.0_20]. Note that *1.8.0_25 does not work*, but will be supported in the future.
+Next, you will need to link:http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html[install Java 8].
 
 After Java is installed, the latest version of link:http://maven.apache.org[Maven needs to be installed].
 
-Set you JAVA_HOME and verify 1.8.0_20 is properly installed.
+Set you JAVA_HOME and verify it is properly installed.
 [source,bash]
 ----
-$ export JAVA_HOME=/path/to/jdk1.8.0_20
+$ export JAVA_HOME=/path/to/jdk1.8.0_25
 $ java -version
-java version "1.8.0_20"
-Java(TM) SE Runtime Environment (build 1.8.0_20-b26)
-Java HotSpot(TM) 64-Bit Server VM (build 25.20-b23, mixed mode)
+java version "1.8.0_25"
+Java(TM) SE Runtime Environment (build 1.8.0_25-b17)
+Java HotSpot(TM) 64-Bit Server VM (build 25.25-b02, mixed mode)
 ----
 
 Next, build Undertow using the following maven command:
