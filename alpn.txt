@@ -1,0 +1,12 @@
+1.7.0u40=org.mortbay.jetty.alpn:alpn-boot:7.0.0.v20140317
+1.7.0u45=org.mortbay.jetty.alpn:alpn-boot:7.0.0.v20140317
+1.7.0u51=org.mortbay.jetty.alpn:alpn-boot:7.0.0.v20140317
+1.7.0u55=org.mortbay.jetty.alpn:alpn-boot:7.0.0.v20140317
+1.7.0u60=org.mortbay.jetty.alpn:alpn-boot:7.0.0.v20140317
+1.7.0u65=org.mortbay.jetty.alpn:alpn-boot:7.0.0.v20140317
+1.7.0u67=org.mortbay.jetty.alpn:alpn-boot:7.0.0.v20140317
+1.8.0=org.mortbay.jetty.alpn:alpn-boot:8.0.0.v20140317
+1.8.0u05=org.mortbay.jetty.alpn:alpn-boot:8.0.0.v20140317
+1.8.0u11=org.mortbay.jetty.alpn:alpn-boot:8.0.0.v20140317
+1.8.0u20=org.mortbay.jetty.alpn:alpn-boot:8.0.0.v20140317
+1.8.0u25=org.mortbay.jetty.alpn:alpn-boot:8.1.2.v20141202
