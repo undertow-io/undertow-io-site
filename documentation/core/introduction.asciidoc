@@ -31,3 +31,8 @@ be exposed via XML configuration rather than programatic configuration.
 
 The documentation is broken up into two parts, the first part focuses on Undertow code, while the second focuses on
 Servlet.
+
+[cols="3,10,3", width="100%"]
+|=======
+|| |link:bootstrapping.html[Next: Bootstrapping Undertow]
+|=======

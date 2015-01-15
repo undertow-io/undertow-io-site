@@ -95,5 +95,10 @@ to create a general purpose authentication mechanism via a Servlet extension thi
 means you can install your extension into a server for all deployments, and it will only be active for deployments
 where the user has specifically selected your mechanism name in web.xml.
 
+[cols="3,14,3", width="100%"]
+|=======
+|| |link:servlet-extensions.html[Next: Servlet Extensions]
+|=======
+
 
 

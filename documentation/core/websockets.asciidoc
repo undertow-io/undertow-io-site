@@ -41,3 +41,8 @@ For maven users the following snippet should be added to your pom.xml:
 </dependency>
 ----
 
+[cols="3,13,2", width="100%"]
+|=======
+|link:reverse-proxy.html[Previous: Reverse Proxy]| |
+|=======
+

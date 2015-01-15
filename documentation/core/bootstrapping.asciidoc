@@ -132,3 +132,8 @@ the builder does not:
 - Listeners can be given different root handlers
 
 In most cases this level of control is not necessary, and it is better to simply use the builder API.
+
+[cols="3,12,3", width="100%"]
+|=======
+|link:introduction.html[Previous: Introduction]| |link:overview.html[Next: Architecture Overview]
+|=======

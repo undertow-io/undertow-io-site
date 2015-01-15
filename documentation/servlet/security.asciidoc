@@ -88,6 +88,11 @@ then specify the mechanism name in web.xml.
 
 For more info see the link:servlet-extensions.html:[Servlet extensions guide].
 
+[cols="6,10,3", width="100%"]
+|=======
+|link:using-non-blocking-handlers-with-servlet.html[Previous: Combining Undertow Handlers and Servlet]| |link:advanced.html[Next: Advanced Usages]
+|=======
+
 
 
 

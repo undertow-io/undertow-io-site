@@ -272,3 +272,10 @@ The complete list of built in predicates is shown below:
 |path-suffix    | path                      | String[]                  | path              |                           |
 |path-template  | value,match               | String, attribute         | value             | match=%R                  | Path template elements under the name
 |regex          | pattern, value, full-match| String, attribute, boolean| pattern           | value=%R,full-match=false | Match groups under number
+|==========================
+
+
+[cols="3,13,2", width="100%"]
+|=======
+|link:security.html[Previous: Security]| |link:reverse-proxy.html[Next: Reverse Proxy]
+|=======

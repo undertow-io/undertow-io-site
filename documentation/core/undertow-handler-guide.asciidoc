@@ -199,3 +199,8 @@ In order to perform a HTTP upgrade you can call
 to 101, and once the exchange is complete your listener will be notified. Your handler is responsible for setting
 any appropriate headers that the upgrade client will be expecting.
 
+[cols="3,10,2", width="100%"]
+|=======
+|link:built-in-handlers.html[Previous: Built In Handlers]| |link:undertow-request-lifecycle.html[Next: Request Lifecycle]
+|=======
+
