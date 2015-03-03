@@ -19,6 +19,11 @@ Listeners represent the entry point of an Undertow application. All incoming req
 a listener is responsible for translating a request into an instance of the `HttpServerExchange` object, and then
 turning the result into a response that can be sent back to the client.
 
+Undertow provides 4 built in listener types, HTTP, AJP, SPDY and HTTP2. HTTPS is provides by using the HTTP listener
+with an SSL enabled connection.
+
+Note that it is expected that now that HTTP2 is out it is expected that SPDY will be deprecated and eventually removed.
+
 XNIO workers
 ~~~~~~~~~~~~
 
@@ -53,8 +58,8 @@ In some situations with blocking IO the buffer size will determine if a response
 fixed content length. If a response fits completely in the buffer and `flush()` is not called then a content length can
 be set automatically.
 
-Listener Options
-~~~~~~~~~~~~~~~~
+Common Listener Options
+~~~~~~~~~~~~~~~~~~~~~~~
 
 In addition to the worker options the listeners take some other options that control server behaviour. These are all
 part of the `io.undertow.UndertowOptions` class. Some of of these only make sense for specific protocols. You can set
@@ -129,10 +134,75 @@ option allows you to turn it off. Defaults to true.
 MAX_BUFFERED_REQUEST_SIZE::
 
 The maximum size of a request that can be saved in bytes. Requests are buffered in a few situations, the main ones being SSL
-renegotiation and saving post data when using FORM based auth. Defaults to 16384.
+renegotiation and saving post data when using FORM based auth. Defaults to 16,384 bytes.
 
 RECORD_REQUEST_START_TIME::
 
 If the server should record the start time of a HTTP request. This is necessary if you wish to log or otherwise use
 the total request time, however has a slight performance impact, as it means that `System.nanoTime()` must be called for
 each request. Defaults to false.
+
+IDLE_TIMEOUT::
+
+The amount of time a connection can be idle for before it is timed out. An idle connection is a connection that has had
+no data transfer in the idle timeout period. Note that this is a fairly coarse grained approach, and small values will
+cause problems for requests with a long processing time.
+
+REQUEST_PARSE_TIMEOUT::
+
+How long a request can spend in the parsing phase before it is timed out. This timer is started when the first bytes
+of a request are read, and finishes once all the headers have been parsed.
+
+NO_REQUEST_TIMEOUT::
+
+The amount of time a connection can sit idle without processing a request, before it is closed by the server.
+
+ENABLE_CONNECTOR_STATISTICS::
+
+If this is true then the connector will record statistics such as requests processed and bytes sent/received. This has
+a performance impact, although it should not be noticeable in most cases.
+
+ALPN
+~~~~
+
+`io.undertow.server.protocol.http.AlpnOpenListener`
+
+Note that the HTTP2 and SPDY connectors require the use of ALPN. Unfortunatly java does not provide a standard way of performing
+ALPN at this time, so it is necessary to run java with a 3rd party ALPN library on the boot class path. For more information
+see the link:http://eclipse.org/jetty/documentation/current/alpn-chapter.html[Jetty ALPN documentation].
+
+SPDY and HTTP2 should use the ALPN open listener to handle the ALPN protocol negotiation.
+
+HTTP Listener
+~~~~~~~~~~~~~
+
+`io.undertow.server.protocol.http.HttpOpenListener`
+
+The HTTP listener is the most commonly used listener type, and deals with HTTP/1.0 and HTTP/1.1. It only takes one additional option.
+
+ENABLE_HTTP2::
+
+If this is true then the connection can be processed as a HTTP2 'prior knowledge' connection. If a HTTP2 connects directly
+to the listener with a HTTP2 connection preface then the HTTP2 protocol will be used instead of HTTP/1.1.
+
+AJP Listener
+~~~~~~~~~~~~
+
+`io.undertow.server.protocol.ajp.AjpOpenListener`
+
+The AJP listener allows the use of the AJP protocol, as used by the apache modules mod_jk and mod_proxy_ajp. It is a binary
+protocol that is slightly more efficient protocol than HTTP, as some common strings are replaced by integers. If the front
+end load balancer supports it then it is recommended to use HTTP2 instead, as it is both a standard protocol and more efficient.
+
+HTTP2 Listener
+~~~~~~~~~~~~~~
+
+
+
+SPDY Listener
+~~~~~~~~~~~~~
+
+`io.undertow.server.protocol.spdy.SpdyOpenListener`
+
+The SPDY protocol is an experimental protocol designed by Google, that formed the basis of HTTP2. Now that HTTP2 has been
+adopted by browser vendors it should be used instead.
