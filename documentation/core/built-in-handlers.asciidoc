@@ -15,7 +15,7 @@ Stuart Douglas
 Built in Handlers
 -----------------
 
-Undertow contains a number of build in handlers that provide common functionality. Most of these handlers can be created
+Undertow contains a number of built in handlers that provide common functionality. Most of these handlers can be created
 using static methods on the `io.undertow.Handlers` utility class.
 
 The most common of these handlers are detailed below.
