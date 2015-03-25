@@ -119,9 +119,9 @@ Add a HTTPS connector::
 ----
 
 Test it out::
-Fire up chrome and head to link:https://localhost:8443[https://localhost:8443]. After clicking through the security warning
+Fire up Chrome and head to link:https://localhost:8443[https://localhost:8443]. After clicking through the security warning
 about the self signed certificate you should see the normal Wildfly welcome page. Open up the developer tools and have
 a look in the 'Network' tab. In the request headers section you should see chrome sending HTTP2 pseudo headers (:path,
 :authority, :method and :scheme). You can also look in the link:chrome://net-internals/[chrome://net-internals/] page,
 and you should be able to see the details of the HTTP2 session (although it will show up as a SPDY_SESSION event, as
-internally chrome has been referring to HTTP2 as SPDY4). 
+internally Chrome has been referring to HTTP2 as SPDY4).
