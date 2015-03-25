@@ -1,0 +1,101 @@
+---
+layout: project-blog
+---
+
+Using Server Push with Undertow
+===============================
+Stuart Douglas
+:Author:    Stuart Douglas
+:Email:     <sdouglas@redhat.com>
+:Date:      2015-03-25
+:Revision:  1.0
+
+The Undertow 1.2 branch supports both HTTP2 and SPDY, both of which support the concept of server push. If you are
+unfamiliar with server push this basically gives the server the ability to push resources cachable resources to
+a client before a client has requested them. For example if a client requests a HTML page and the server knows this page
+contains an image, the server could push the image to the client immediately, rather than waiting for the client to
+receive the page, parse the HTML and then send the request.
+
+Caveats
+-------
+
+Before I go into detail about how to use push, there are some pitfalls that you should be aware of. First you can only
+push resources that are allowed to be cached (think of pushed responses as pre-loading the browser cache).
+
+You should also be aware that in general there is no reliable way to know if a browser already has a resource cached. If
+you push a resource that a browser has cached this is not a big deal, as the browser will just reset the stream, however
+it does waste some bandwidth and other server resources.
+
+It is also important to note that if SPDY is in use then it is not possible to set the request headers that correspond
+to the pushed response, instead the relevant request headers from the current request are assumed by the browser.
+
+Pushing is only allowed when a request is in progress, as all pushed responses correspond to an existing browser
+initiated request (you cannot do websocket style full duplex communication, at least not without some kind of long
+polling style hack).
+
+The API
+-------
+
+At the moment the API is experimental and somewhat subject to change. At the moment there is no standard API for server
+push (this is coming in Servlet 4.0), so it is necessary to use Undertow's native API.
+
+The Undertow API to support push is provided by the ServerConnection object, which can be obtained by calling
+`HttpServerExchange.getConnection()` (if you are using the Servlet API and don't have access to the exchange you can
+get it by calling `io.undertow.servlet.handlers.ServletRequestContext.requireCurrent().getExchange()`.
+
+The API is as follows:
+
+[source,java]
+----
+
+    /**
+     * Attempts to push a resource if this connection supports server push. Otherwise the request is ignored.
+     *
+     * Note that push is always done on a best effort basis, even if this method returns true it is possible that
+     * the remote endpoint will reset the stream.
+     *
+     * @param path The path of the resource
+     * @param method The request method
+     * @param requestHeaders The request headers
+     * @return <code>true</code> if the server attempted the push, false otherwise
+     */
+    public boolean pushResource(final String path, final HttpString method, final HeaderMap requestHeaders);
+
+    /**
+     * Attempts to push a resource if this connection supports server push. Otherwise the request is ignored.
+     *
+     * Note that push is always done on a best effort basis, even if this method returns true it is possible that
+     * the remote endpoint will reset the stream.
+     *
+     * The {@link io.undertow.server.HttpHandler} passed in will be used to generate the pushed response.
+     *
+     * @param path The path of the resource
+     * @param method The request method
+     * @param requestHeaders The request headers
+     * @return <code>true</code> if the server attempted the push, false otherwise
+     */
+    public boolean pushResource(final String path, final HttpString method, final HeaderMap requestHeaders, HttpHandler handler);
+
+    /**
+     * Returns true if push is supported
+     *
+     * @return <code>true</code> if push is supported on this connection
+     */
+    public boolean isPushSupported() {
+        return false;
+    }
+----
+
+For the most part the API is fairly self explanatory, `isPushSupported()` can be used to determine if the connection
+supports push, and `pushResource()` is used to push the specified resource. Note that as specified above the
+`requestHeaders` parameter is ignored if SPDY is in use, it is only applicable for HTTP2.
+
+The Learning Push Handler
+-------------------------
+
+Undertow provides a built in handler that provides some out of the box server push functionality. This handler is the
+`io.undertow.server.handlers.LearningPushHandler`. If you include this in your handler chain it will attempt to learn
+which resources browsers request soon after requesting specific pages, and uses this knowledge to initiate a server push.
+
+This works by examining the referrer header on requests, and using a heuristic to decide which resources are a candidate
+ to be pushed. 
