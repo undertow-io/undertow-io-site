@@ -1,0 +1,127 @@
+---
+layout: project-blog
+---
+
+Using HTTP2 With Wildfly 9.0.0.Beta1
+====================================
+Stuart Douglas
+:Author:    Stuart Douglas
+:Email:     <sdouglas@redhat.com>
+:Date:      2015-03-26
+:Revision:  1.0
+
+
+The upcoming Wildfly 9.0.0.Beta1 release supports HTTP2, which includes new features like request multiplexing and
+server push, unfortunately due to a few different factors it is not as straightforward to set up as HTTP1. The complexity
+comes because HTTP2 as implemented by major browsers requires the use of TLS. This is further complicated by the fact
+that it does not use straight TLS, but requires a extension called ALPN (application layer protocol negotiation).
+
+Support for ALPN will be coming in Java 9, however unfortunately it is not present in JDK7 or JDK8. To get around this
+we need to install a jar that provides ALPN support into the JVM's boot class path. The version of the jar file that you
+need is tied to the JVM version in use, so you must make sure you are using the correct version for you JVM.
+
+Note that you must use JDK8 to use HTTP2, as HTTP2 requires stronger cyphers than are present in JDK7.
+
+[WARNING]
+The script and instructions below are just using a self signed certificate that is present in the Undertow test suite
+to get you started. DO NOT USE THIS IN PRODUCTION. You should get a real certificate signed by a trusted certificate
+authority.
+
+The TL;DR; version
+------------------
+
+Make sure you are using `JDK 1.8.0u40`, then run the script below. This will (hopefully) perform all the steps that are
+required to setup Wildfly.
+
+[code]
+----
+#!/bin/bash
+
+if [ "x$JBOSS_HOME" == "x" ]; then
+	echo "JBOSS_HOME is not set, please set it to the root of your Wildfly installation"
+	exit
+fi
+
+cd $JBOSS_HOME
+
+#IMPORTANT: The ALPN version changes depending on the version of the JVM you are using
+#If you see class not found or similar SSL errors please look up the correct version
+# at http://eclipse.org/jetty/documentation/current/alpn-chapter.html
+ALPN_VERSION=8.1.3.v20150130
+
+#download our fake certificate for testing
+#DO NOT USE THIS IN PRODUCTION
+#Get a real cert instead
+curl https://raw.githubusercontent.com/undertow-io/undertow/master/core/src/test/resources/server.keystore >standalone/configuration/server.keystore
+curl https://raw.githubusercontent.com/undertow-io/undertow/master/core/src/test/resources/server.truststore >standalone/configuration/server.truststore
+
+#Download the ALPN jar we are interested in
+curl http://central.maven.org/maven2/org/mortbay/jetty/alpn/alpn-boot/$ALPN_VERSION/alpn-boot-$ALPN_VERSION.jar >bin/alpn-boot-$ALPN_VERSION.jar
+
+#Add ALPN to the boot class path
+echo 'JAVA_OPTS="$JAVA_OPTS' " -Xbootclasspath/p:$JBOSS_HOME/bin/alpn-boot-$ALPN_VERSION.jar" '"' >>bin/standalone.conf
+
+#Start Wildfly in the background
+./bin/standalone.sh &
+#wait for Wildfly to start
+sleep 15
+
+#Add a HTTPS connector
+./bin/jboss-cli.sh -c "--command=/core-service=management/security-realm=https:add()"
+./bin/jboss-cli.sh -c "--command=/core-service=management/security-realm=https/authentication=truststore:add(keystore-path=server.truststore, keystore-password=password, keystore-relative-to=jboss.server.config.dir)"
+./bin/jboss-cli.sh -c "--command=/core-service=management/security-realm=https/server-identity=ssl:add(keystore-path=server.keystore, keystore-password=password, keystore-relative-to=jboss.server.config.dir)"
+./bin/jboss-cli.sh -c "--command=/subsystem=undertow/server=default-server/https-listener=https:add(socket-binding=https, security-realm=https, enable-http2=true)"
+
+#shut down Wildfly
+kill `jps | grep jboss-modules.jar | cut -f1 -d ' ' `
+----
+
+A step by step guide
+--------------------
+
+Figure out the correct Jetty ALPN Jar for your JDK version::
+Have a look at http://eclipse.org/jetty/documentation/current/alpn-chapter.html to figure out which version of Jetty
+ALPN is required for your JVM version. Download the correct jar version from
+link:http://central.maven.org/maven2/org/mortbay/jetty/alpn/alpn-boot/[maven central] and place it in the Wildfly bin
+directory.
+
+Add ALPN to the boot class path::
+Edit standalone.conf and add the following line to the JAVA_OPTS environment variable (making appropriate substitutions
+for the ALPN version). `-Xbootclasspath/p:$JBOSS_HOME/bin/alpn-boot-$ALPN_VERSION.jar`
+
+Get a SSL certificate and create a keystore and truststore::
+For testing purposes you can download the ones from the Undertow test suite that are linked in the script above. For
+production use you will need to create a certificate and get it signed by a certificate authority. For the purposes of
+these instructions we assume they are located in standalone/configuration/server.[keystore|truststore].
+
+Start Wildfly::
+We are going to make the remaining changes using the CLI, which means Wildfly must be started.
+
+Connect to Wildfly using the CLI::
+Run the following command to connect: `$JBOSS_HOME/bin/jboss-cli.sh -c`.
+
+Add a security realm::
+
+This contains the configuration that is used to tell the HTTPS connector which certificates to use.
+
+[code]
+----
+/core-service=management/security-realm=https:add()
+/core-service=management/security-realm=https/authentication=truststore:add(keystore-path=server.truststore, keystore-password=password, keystore-relative-to=jboss.server.config.dir)
+/core-service=management/security-realm=https/server-identity=ssl:add(keystore-path=server.keystore, keystore-password=password, keystore-relative-to=jboss.server.config.dir)
+----
+
+Add a HTTPS connector::
+
+[code]
+----
+/subsystem=undertow/server=default-server/https-listener=https:add(socket-binding=https, security-realm=https, enable-http2=true)
+----
+
+Test it out::
+Fire up chrome and head to link:https://localhost:8443[https://localhost:8443]. After clicking through the security warning
+about the self signed certificate you should see the normal Wildfly welcome page. Open up the developer tools and have
+a look in the 'Network' tab. In the request headers section you should see chrome sending HTTP2 pseudo headers (:path,
+:authority, :method and :scheme). You can also look in the link:chrome://net-internals/[chrome://net-internals/] page,
+and you should be able to see the details of the HTTP2 session (although it will show up as a SPDY_SESSION event, as
+internally chrome has been referring to HTTP2 as SPDY4). 

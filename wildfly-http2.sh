@@ -10,7 +10,7 @@ cd $JBOSS_HOME
 #IMPORTANT: The ALPN version changes depending on the version of the JVM you are using
 #If you see class not found or similar SSL errors please look up the correct version
 # at http://eclipse.org/jetty/documentation/current/alpn-chapter.html
-ALPN_VERSION=8.0.0.v20140317
+ALPN_VERSION=8.1.3.v20150130
 
 #download our fake certificate for testing
 #DO NOT USE THIS IN PRODUCTION

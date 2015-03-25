@@ -98,4 +98,4 @@ Undertow provides a built in handler that provides some out of the box server pu
 which resources browsers request soon after requesting specific pages, and uses this knowledge to initiate a server push.
 
 This works by examining the referrer header on requests, and using a heuristic to decide which resources are a candidate
- to be pushed. 
+ to be pushed.
