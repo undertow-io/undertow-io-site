@@ -22,18 +22,17 @@ need is tied to the JVM version in use, so you must make sure you are using the 
 
 Note that you must use JDK8 to use HTTP2, as HTTP2 requires stronger cyphers than are present in JDK7.
 
-[WARNING]
-The script and instructions below are just using a self signed certificate that is present in the Undertow test suite
-to get you started. DO NOT USE THIS IN PRODUCTION. You should get a real certificate signed by a trusted certificate
+*IMPORTANT*: The script and instructions below are just using a self signed certificate that is present in the Undertow test suite
+to get you started. *DO NOT USE THIS CERTIFICATE IN PRODUCTION.* You should get a real certificate signed by a trusted certificate
 authority.
 
-The TL;DR; version
+The TL;DR version
 ------------------
 
-Make sure you are using `JDK 1.8.0u40`, then run the script below. This will (hopefully) perform all the steps that are
+Make sure you are using *JDK 1.8.0u40*, then run the script below. This will (hopefully) perform all the steps that are
 required to setup Wildfly.
 
-[code]
+[source,bash]
 ----
 #!/bin/bash
 
@@ -104,7 +103,7 @@ Add a security realm::
 
 This contains the configuration that is used to tell the HTTPS connector which certificates to use.
 
-[code]
+[source]
 ----
 /core-service=management/security-realm=https:add()
 /core-service=management/security-realm=https/authentication=truststore:add(keystore-path=server.truststore, keystore-password=password, keystore-relative-to=jboss.server.config.dir)
@@ -113,7 +112,7 @@ This contains the configuration that is used to tell the HTTPS connector which c
 
 Add a HTTPS connector::
 
-[code]
+[source]
 ----
 /subsystem=undertow/server=default-server/https-listener=https:add(socket-binding=https, security-realm=https, enable-http2=true)
 ----
@@ -122,6 +121,6 @@ Test it out::
 Fire up Chrome and head to link:https://localhost:8443[https://localhost:8443]. After clicking through the security warning
 about the self signed certificate you should see the normal Wildfly welcome page. Open up the developer tools and have
 a look in the 'Network' tab. In the request headers section you should see chrome sending HTTP2 pseudo headers (:path,
-:authority, :method and :scheme). You can also look in the link:chrome://net-internals/[chrome://net-internals/] page,
+:authority, :method and :scheme). You can also look in the `chrome://net-internals` page,
 and you should be able to see the details of the HTTP2 session (although it will show up as a SPDY_SESSION event, as
 internally Chrome has been referring to HTTP2 as SPDY4).
