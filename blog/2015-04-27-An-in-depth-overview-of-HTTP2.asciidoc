@@ -28,14 +28,14 @@ readable without using tools to decode the protocol.
 
 Multiplexing::
 HTTP/2 supports multiplexing several streams over a single connection. This means that a client can send multiple requests
-on the same connection, and the sever can respond in whatever order the responses become available.
+on the same connection, and the server can respond in whatever order the responses become available.
 
 Header Compression::
 HTTP requests and responses generally include a large number of redundant headers. HTTP/2 uses HPACK header compression
 to greatly compress headers.
 
 Server Push::
-Server push allows a server to send additional catchable resources to the client that the client has not explicitly asked
+Server push allows a server to send additional cacheable resources to the client that the client has not explicitly asked
 for. The allows the server to anticipate the resources the client will request next and send them eagerly, which saves
 a round trip.
 
@@ -64,7 +64,7 @@ next protocol to use after the TLS handshake is complete. If either the client o
 it will be ignored, and HTTP/1.1 will be used instead.
 
 When the client connects to the server it sends a list of supported protocols. The server will then decide on the next
-protocol to use and send this back in its response. If the sever decides to the HTTP/2 it will send pack 'h2' as the
+protocol to use and send this back in its response. If the server decides to use HTTP/2 it will send pack 'h2' as the
 selected protocol, and HTTP/2 will be used for the connection.
 
 HTTP upgrade based connection http:// URIs::
@@ -86,7 +86,7 @@ encoded HTTP/2 settings frame (more on this later).
 Connection via prior knowledge for hosts which are known to support HTTP/2::
 
 If it is known that a given host supports HTTP/2 then a client can connect directly by sending a HTTP/2 connection preface.
-This connection preface is covered in detail below, but it is essentially follows the format of HTTP request with `PRI`
+This connection preface is covered in detail below, but it essentially follows the format of HTTP request with `PRI`
 as the request method and `HTTP/2.0` as the protocol, which allows HTTP/1.1 servers to parse it normally. It is not
 expected that this method will be used on the open internet, however it has its uses (e.g. the Undertow reverse proxy
 implementation will use it to connect to backend server it knows support HTTP/2).
@@ -322,12 +322,12 @@ To understand why this is necessary consider a server handling a large +POST+ re
 acts as an intermediary between the network and some web application, if the web application is slow to read this POST
 data, then as a server we only have two options:
 
-- Buffer a potentially unbounded amount of data::
+Buffer a potentially unbounded amount of data::
 
 In this scenario the client keeps sending data, and we keep storing it in memory waiting for the web application to
 ask for it. This has the potential for a misbehaving or malicious client to make the server run out of memory.
 
-- Stop reading from the underlying socket::
+Stop reading from the underlying socket::
 
 Once we have buffered a certain amount of data we could simply stop reading from the underlying socket until the end
 user application empties the buffer. Unfortunately this means that all other requests will also be blocked (head of
