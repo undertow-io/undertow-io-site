@@ -43,7 +43,7 @@ a round trip.
 Connection Establishment
 ------------------------
 
-The first part of any usage of HTTP/2 is connection establishment. It is not really practical to allocate a new port just
+The first part of any usage of HTTP/2 is connection establishment. It would not be practical to allocate a new port just
 for HTTP/2 for various reasons, so instead the protocol defines 3 different methods of connection that allow the existing
 HTTP and HTTPS ports to be re-used.
 
@@ -59,37 +59,37 @@ HTTP/2 Connection methods
 
 ALPN based connection for https:// URIs::
 
-link:https://tools.ietf.org/html/rfc7301[ALPN] stands for 'Application Layer Protocol Negotiation', and is a TLS extension that allows a client to negotiate the
-next protocol to use after the TLS handshake is complete. If either the client or the server does not support ALPN, then
-it will be ignored, and HTTP/1.1 will be used instead.
+    link:https://tools.ietf.org/html/rfc7301[ALPN] stands for 'Application Layer Protocol Negotiation', and is a TLS extension that allows a client to negotiate the
+    next protocol to use after the TLS handshake is complete. If either the client or the server does not support ALPN, then
+    it will be ignored, and HTTP/1.1 will be used instead.
 
-When the client connects to the server it sends a list of supported protocols. The server will then decide on the next
-protocol to use and send this back in its response. If the server decides to use HTTP/2 it will send pack 'h2' as the
-selected protocol, and HTTP/2 will be used for the connection.
+    When the client connects to the server it sends a list of supported protocols. The server will then decide on the next
+    protocol to use and send this back in its response. If the server decides to use HTTP/2 it will send pack 'h2' as the
+    selected protocol, and HTTP/2 will be used for the connection.
 
 HTTP upgrade based connection http:// URIs::
 
-When using this method a client sends a HTTP/1.1 request as normal, however it includes an `Upgrade: h2c` header
-that indicates to the server that it wishes to upgrade the connection to HTTP/2.
+    When using this method a client sends a HTTP/1.1 request as normal, however it includes an `Upgrade: h2c` header
+    that indicates to the server that it wishes to upgrade the connection to HTTP/2.
 
-If the server does not understand HTTP/2 or for whatever reason does not wish to use it, it will simply ignore the upgrade
-request and send a normal HTTP/1.1 response. If the server does decide to upgrade to HTTP/2 then it sends back a HTTP/1.1
-101 (switching protocols) response, and then after connection establishment has completed sends the response to the
-original request using HTTP/2.
+    If the server does not understand HTTP/2 or for whatever reason does not wish to use it, it will simply ignore the upgrade
+    request and send a normal HTTP/1.1 response. If the server does decide to upgrade to HTTP/2 then it sends back a HTTP/1.1
+    101 (switching protocols) response, and then after connection establishment has completed sends the response to the
+    original request using HTTP/2.
 
-A client connecting using this method must also include a `HTTP2-Settings` header field, which contains a base 64
-encoded HTTP/2 settings frame (more on this later).
+    A client connecting using this method must also include a `HTTP2-Settings` header field, which contains a base 64
+    encoded HTTP/2 settings frame (more on this later).
 
-(NOTE: Firefox and Chrome have both publicly stated that they are not going to support this method, so it remains to be
- seen if this method will see much real world use).
+    (NOTE: Firefox and Chrome have both publicly stated that they are not going to support this method, so it remains to be
+     seen if this method will see much real world use).
 
 Connection via prior knowledge for hosts which are known to support HTTP/2::
 
-If it is known that a given host supports HTTP/2 then a client can connect directly by sending a HTTP/2 connection preface.
-This connection preface is covered in detail below, but it essentially follows the format of HTTP request with `PRI`
-as the request method and `HTTP/2.0` as the protocol, which allows HTTP/1.1 servers to parse it normally. It is not
-expected that this method will be used on the open internet, however it has its uses (e.g. the Undertow reverse proxy
-implementation will use it to connect to backend server it knows support HTTP/2).
+    If it is known that a given host supports HTTP/2 then a client can connect directly by sending a HTTP/2 connection preface.
+    This connection preface is covered in detail below, but it essentially follows the format of HTTP request with `PRI`
+    as the request method and `HTTP/2.0` as the protocol, which allows HTTP/1.1 servers to parse it normally. It is not
+    expected that this method will be used on the open internet, however it has its uses (e.g. the Undertow reverse proxy
+    implementation will use it to connect to backend server it knows support HTTP/2).
 
 HTTP/2 connection preface
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -97,7 +97,7 @@ HTTP/2 connection preface
 Once the initial connection has been established both the client and the server must send a connection preface. The
 client sends the string `PRI * HTTP/2.0\r\n\r\nSM\r\n\r\n`, followed by HTTP/2 +SETTINGS+ frame, which may be empty.
 
-The server must send a SETTINGS frame (which may be empty).
+The server must send a +SETTINGS+ frame (which may be empty).
 
 Once the connection preface has been exchanged the connection is considered established, and the endpoints can use it
 to communicate.
@@ -146,10 +146,10 @@ Sends a ping to the remote endpoint, which must respond with a ping of its own
 Sent when an endpoint is going to close the connection
 
 +WINDOW_UPDATE+::
-Updates the flow control window for both individual streams and the whole connection
+Updates the flow control window
 
 +CONTINUATION+::
-Used to send additional headers if the headers are two large to fit in a single +HEADERS+ frame
+Used to send additional headers if the headers are too large to fit in a single +HEADERS+ frame
 
 It is also possible for extensions to define new frame types. An endpoint that does not understand a frame type must
 simply discard the frame, rather than treating it as an error.
@@ -159,16 +159,13 @@ Multiplexing
 ------------
 
 In HTTP/1.1 requests are essentially processed one at a time. A client sends a request to a server, which generates a
-response, once the client has received the response it can send another request to the server. This is not great from a
-performance point of view, as only one resource can be requested at a time a single slow resource can delay the rendering
+response, and once the client has received the response it can send another request to the server. This is not great from a
+performance point of view. Because only one resource can be requested at a time a single slow resource can delay the rendering
 of a page. It also does not allow for multiple resources to be generated at the same time.
 
 As a result there are lots of workaround that are used on both the server and browser side to improve performance, including:
 
 - Browsers opening multiple connections per host, so multiple resources can requested at once
-
-- HTTP pipelining, where requests are send before responses are relieved, so the server can begin processing them
-immediately once the current response is done
 
 - Spriting, where a page with multiple images merges them into a single image, and CSS is used to control the part of the
 image that is displayed
@@ -176,12 +173,15 @@ image that is displayed
 - Domain sharding, where resources are served from different subdomains, which allows the browser to open more connections
 as the browsers internal connection limit is applied per domain
 
+- HTTP pipelining, where requests are send before responses are relieved, so the server can begin processing them
+immediately once the current response is done
+
 HTTP/2 avoids these issues, through the use of multiplexing. This allows multiple requests to be active at once, and the
 responses can be interleaved on the wire as they become available.
 
 This is done through the concept of streams, in HTTP/2 every request/response pair is mapped to a stream. Each stream is
-given a unique id. Streams started by the client (most streams) must use odd numbers for the stream identifier. Streams
-started by the server (server push requests) use even stream identifiers. Streams are initiated by a +HEADERS+ frame
+given a unique id. Streams started by the client (most streams) must use odd numbers for the stream identifier, while
+streams initiated by the server (server push) use even identifiers. Streams are initiated by a +HEADERS+ frame
 from the client, or a +PUSH_PROMISE+ frame from the server. All HTTP/2 frames include a stream identifier in the header,
 which allows an endpoint to determine which request the frame belongs to. By default there is no limit to the number of
 concurrent streams that can be active on a connection, although the server can impose a limit using a +SETTINGS+ frame
@@ -191,10 +191,9 @@ Request/Response Overview
 -------------------------
 
 At its core HTTP/2 is still a request oriented protocol. A client sends the server a request, the server generates a
-response and sends it back (server push is obviously an exception to this). Because of this it maps cleanly to HTTP/1.1
-semantics, so in many cases the application code that is processing does not need to know which version of HTTP the wire
-protocol is using.
-
+response and sends it back (server push is obviously an exception to this). This means that it maps cleanly to HTTP/1.1
+semantics, so in many cases the application code that is processing a request does not need to know which version of HTTP
+the wire protocol is using.
 
 A request is started by a client sending a +HEADERS+ frame to open a stream. As you would expect from the name this
 contains normal HTTP request headers, however it also contains the following pseudo headers:
@@ -211,18 +210,19 @@ The request scheme. Usually either +http+ or +https+
 +:authority+::
 Similar to the HTTP/1.1 +Host:+ header, this contains the authority portion of the target URI (e.g. http://example.com)
 
-These headers must be present and the first headers in the request. After this the +HEADERS+ frame can contain any
+These pseudo headers must be present and the first headers in the frame. After this the +HEADERS+ frame can contain any
 number of request headers. If the number of request headers exceeds the maximum frame size then the client can immediately
 send +CONTINUATION+ frames with additional headers. The last frame containing headers will have the +END_HEADERS+ flag
 set, which tells the remote endpoint that there is no more headers.
 
-The request can also contain data (e.g. +POST+ requests). If the request has no data the initial +HEADERS+ frame will have
+The request can also contain data (e.g. POST requests). If the request has no data the initial +HEADERS+ frame will have
 the +END_STREAM+ flag set, which tells the server there is no data. Otherwise the server will expect the client to send
 any number of +DATA+ frames, with the +END_STREAM+ flag set on the last one.
 
-When the server is ready to send a response sequence of frames is similar to when the client sends a request (+HEADERS+,
-followed by optional +CONTINUATION+ frames for additional headers, followed by +DATA+ frames for the entity body),
-however in this case the only pseudo header field is +:status+, which carries the response status code.
+When the server is ready to send a response sequence of frames is similar to when the client sends a request, a single
++HEADERS+ frame, followed by optional +CONTINUATION+ frames if the headers do not fit in a single frame, followed by
++DATA+ frames for the entity body, however in this case the only pseudo header field is +:status+, which carries the
+response status code.
 
 Note that because of the framed structure of HTTP/2 it is no longer necessary (in fact explicitly forbidden) to use
 the chunked transfer encoding that HTTP/1.1 uses for entities of unknown lengths. If the content length is known it is
@@ -311,14 +311,14 @@ ones, but in general a client cannot rely on priority as being anything other th
 Flow Control
 ------------
 
-HTTP/2 has the concept of a credit based flow control mechanism. Every stream, and the connection as a whole has a
+HTTP/2 has the concept of a credit based flow control mechanism. Every stream, and the connection as a whole
 maintains a send window, which is the amount of data that the server is allowed to send on the stream/connection. Once
 this window is exhausted no more data can be sent, until the remote endpoint sends a +WINDOW_UPDATE+ frame that increases
 the send window size. This additional flow control window is on top of the flow control already provided by TCP. The
 default window size is 65,535 bytes, however many implementation will increase this in the initial +SETTINGS+ frame.
 Flow control only applies to +DATA+ frames.
 
-To understand why this is necessary consider a server handling a large +POST+ request from a client. The server basically
+To understand why this is necessary consider a server handling a large POST request from a client. The server basically
 acts as an intermediary between the network and some web application, if the web application is slow to read this POST
 data, then as a server we only have two options:
 
