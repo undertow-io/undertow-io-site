@@ -8,8 +8,6 @@ require 'breadcrumbs'
 require 'bootstrap-sass'
 
 Awestruct::Extensions::Pipeline.new do
-  extension Docindexer.new
-  transformer Graphviz.new
   extension Breadcrumbs.new
 	helper Awestruct::Extensions::Partial
 	extension Awestruct::Extensions::WgetWrapper.new
