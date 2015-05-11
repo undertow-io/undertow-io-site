@@ -4,8 +4,6 @@ require 'css_minifier'
 require 'html_minifier'
 require 'file_merger'
 require 'less_config'
-require 'graphviz'
-require 'docindexer'
 require 'breadcrumbs'
 require 'bootstrap-sass'
 
