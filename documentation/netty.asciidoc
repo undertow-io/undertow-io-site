@@ -1,5 +1,0 @@
----
-title: Undertow FAQ
-layout: redirect
-redirect_to: documentation/faq.html
----
