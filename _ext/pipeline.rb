@@ -8,7 +8,7 @@ require 'breadcrumbs'
 require 'bootstrap-sass'
 
 Awestruct::Extensions::Pipeline.new do
-  extension Breadcrumbs.new
+
 	helper Awestruct::Extensions::Partial
 	extension Awestruct::Extensions::WgetWrapper.new
 	transformer Awestruct::Extensions::JsMinifier.new
