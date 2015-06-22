@@ -16,7 +16,12 @@ Documentation
 1.2.0
 ~~~~~
 
+
 link:undertow-docs/undertow-docs-1.2.0/index.html[Online version]
 
 Offline Zip link:undertow-docs/undertow-docs-1.2.0.zip[undertow-docs-1.2.0.zip]
+
+link:javadoc/1.2.x/index.html[Online Javadoc]
+
+link:javadoc/1.2.x/undertow-1.2.x-javadoc.jar[Download Javadoc]
 
