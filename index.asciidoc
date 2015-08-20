@@ -26,7 +26,7 @@ Welcome to the Undertow HTTP2 Demo Server!
             document.getElementById("transport").innerHTML = transport;
             var summary = "In order to view this site with HTTP/2, you need to install one of the clients listed <a href='https://github.com/http2/http2-spec/wiki/Implementations'>here</a>.  Also, you will need to follow the special setup directions linked from that page, as HTTP/2 is often disabled by default.";
             if (transport.indexOf("h2") == 0) {
-                summary = "Congratulations! Your client is usinng HTTP/2.";
+                summary = "Congratulations! Your client is using HTTP/2.";
             }
             document.getElementById("summary").innerHTML = summary;
         }
