@@ -19,7 +19,7 @@ Documentation
 
 link:undertow-docs/undertow-docs-1.2.0/index.html[Online version]
 
-Offline Zip link:undertow-docs/undertow-docs-1.2.0.zip[undertow-docs-1.2.0.zip]
+link:undertow-docs/undertow-docs-1.2.0.zip[Offline Zip]
 
 link:javadoc/1.2.x/index.html[Online Javadoc]
 
