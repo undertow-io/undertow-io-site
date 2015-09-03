@@ -33,8 +33,11 @@ for Undertow:
     for SPDY and version 1.1 of the websocket specification. It also contains many bug fixes.
 
 1.2::
-    This is the current upstream master branch. At present the only real difference between it and 1.1 is support for
-    HTTP2 and the ability to act as a front end mod_proxy load balancer.
+    This branch is targeted at Wildfly 9.0. It added support for  HTTP2 and the ability to act as a front end
+    mod_proxy load balancer.
+
+1.3::
+    The current development branch that will be part of Wildfly 10.
 
 In order to use Undertow you need to add the following artifacts to your pom:
 
@@ -44,19 +47,19 @@ In order to use Undertow you need to add the following artifacts to your pom:
 <dependency>
     <groupId>io.undertow</groupId>
     <artifactId>undertow-core</artifactId>
-    <version>1.2.0.Beta4</version>
+    <version>1.2.11.Final</version>
 </dependency>
 
 <dependency>
     <groupId>io.undertow</groupId>
     <artifactId>undertow-servlet</artifactId>
-    <version>1.2.0.Beta4</version>
+    <version>1.2.11.Final</version>
 </dependency>
 
 <dependency>
     <groupId>io.undertow</groupId>
     <artifactId>undertow-websockets-jsr</artifactId>
-    <version>1.2.0.Beta4</version>
+    <version>1.2.11.Final</version>
 </dependency>
 ----
 
@@ -67,19 +70,19 @@ Or for 1.1:
 <dependency>
     <groupId>io.undertow</groupId>
     <artifactId>undertow-core</artifactId>
-    <version>1.1.0.Final</version>
+    <version>1.1.8.Final</version>
 </dependency>
 
 <dependency>
     <groupId>io.undertow</groupId>
     <artifactId>undertow-servlet</artifactId>
-    <version>1.1.0.Final</version>
+    <version>1.1.8.Final</version>
 </dependency>
 
 <dependency>
     <groupId>io.undertow</groupId>
     <artifactId>undertow-websockets-jsr</artifactId>
-    <version>1.1.0.Final</version>
+    <version>1.1.8.Final</version>
 </dependency>
 ----
 
