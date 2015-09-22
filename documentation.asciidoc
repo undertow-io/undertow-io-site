@@ -24,7 +24,7 @@ link:undertow-docs/undertow-docs-1.3.0.zip[Offline Zip]
 
 link:javadoc/1.3.x/index.html[Online Javadoc]
 
-link:javadoc/1.3.x/undertow-1.2.x-javadoc.jar[Download Javadoc]
+link:javadoc/1.3.x/undertow-1.3.x-javadoc.jar[Download Javadoc]
 
 1.2.0
 ~~~~~
