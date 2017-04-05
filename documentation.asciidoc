@@ -13,6 +13,17 @@ Stuart Douglas
 Documentation
 -------------
 
+1.4.0
+~~~~~
+
+
+link:undertow-docs/undertow-docs-1.4.0/index.html[Online version]
+
+link:undertow-docs/undertow-docs-1.4.0.zip[Offline Zip]
+
+link:javadoc/1.4.x/index.html[Online Javadoc]
+
+link:javadoc/1.4.x/undertow-1.4.x-javadoc.jar[Download Javadoc]
 
 1.3.0
 ~~~~~
