@@ -27,10 +27,6 @@ Undertow is sponsored by JBoss and is the default web server in the link:https:/
 Why Undertow
 ------------
 
-Lightweight::
-Undertow is extremely lightweight, with the Undertow core jar coming in at under 1Mb. It is lightweight at runtime
-too, with a simple embedded server using less than 4Mb of heap space.
-
 HTTP/2 Support::
 Undertow supports HTTP/2 out of the box, no overriding the boot class path required.
 
