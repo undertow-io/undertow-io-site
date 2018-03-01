@@ -5,7 +5,6 @@ require 'html_minifier'
 require 'file_merger'
 require 'less_config'
 require 'breadcrumbs'
-require 'bootstrap-sass'
 
 Awestruct::Extensions::Pipeline.new do
 

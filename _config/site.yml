@@ -9,26 +9,6 @@ css_minifier: disabled
 js_minifier: disabled
 html_minifier: disabled
 
-# Merge multiple JavaScript files to improve performance
-fileMerger:
-  enabled: true
-  outputFilePath: /javascripts/bootstrap-community.js
-  paths:
-    - /javascripts/_bootstrap-transition.js
-    - /javascripts/_bootstrap-alert.js
-    - /javascripts/_bootstrap-button.js
-    - /javascripts/_bootstrap-carousel.js
-    - /javascripts/_bootstrap-collapse.js
-    - /javascripts/_bootstrap-dropdown.js
-    - /javascripts/_bootstrap-modal.js
-    - /javascripts/_bootstrap-tooltip.js
-    - /javascripts/_bootstrap-popover.js
-    - /javascripts/_bootstrap-scrollspy.js
-    - /javascripts/_bootstrap-tab.js
-    - /javascripts/_bootstrap-typeahead.js
-    - /javascripts/_bootstrap-affix.js
-    - /javascripts/_jbossorg-navbarfix.js
-    - /javascripts/_jbossorg-misc.js
 
 # Cache hosted fonts, images and javascript
 wget:
@@ -62,8 +42,8 @@ profiles:
     jborg_images_url: /cache/static.jboss.org/theme/images
     jborg_js_url: /cache/static.jboss.org/theme/js
     project_images_url: /cache/static.jboss.org/images/example
-    bootstrap_css_url: /stylesheets/bootstrap-community
-    bootstrap_js_url: /javascripts/bootstrap-community
+    bootstrap_css_url: http://static.jboss.org/theme/css/bootstrap-community/2.3.1.1/bootstrap-community
+    bootstrap_js_url: http://static.jboss.org/wildfly/scripts/bootstrap-community
   production:
     minified: .min
     css_minifier: enabled
@@ -73,8 +53,8 @@ profiles:
     jborg_images_url: http://static.jboss.org/theme/images
     jborg_js_url: http://static.jboss.org/theme/js
     project_images_url: http://static.jboss.org/images/example
-    bootstrap_css_url: http://static.jboss.org/theme/css/bootstrap-community/2.3.1.0/bootstrap-community
-    bootstrap_js_url: http://static.jboss.org/theme/js/libs/bootstrap-community/2.3.1.0/bootstrap-community
+    bootstrap_css_url: http://static.jboss.org/theme/css/bootstrap-community/2.3.1.1/bootstrap-community
+    bootstrap_js_url: http://static.jboss.org/wildfly/scripts/bootstrap-community
     base_url: http://undertow.io
     deploy:
       host: undertow@filemgmt.jboss.org
@@ -88,8 +68,8 @@ profiles:
     jborg_images_url: /cache/static.jboss.org/theme/images
     jborg_js_url: /cache/static.jboss.org/theme/js
     project_images_url: /cache/static.jboss.org/images/example
-    bootstrap_css_url: /stylesheets/bootstrap-community
-    bootstrap_js_url: /javascripts/bootstrap-community
+    bootstrap_css_url: http://static.jboss.org/theme/css/bootstrap-community/2.3.1.1/bootstrap-community
+    bootstrap_js_url: http://static.jboss.org/wildfly/scripts/bootstrap-community
     base_url: https://http2.undertow.io
 asciidoc:
     attributes:

@@ -1,0 +1,19 @@
+---
+layout: project-blog
+---
+
+= Undertow 2.0 released
+Stuart Douglas
+:Author:    Stuart Douglas
+:Email:     <sdouglas@redhat.com>
+:Date:      2018-03-01
+:Revision:  1.0
+
+
+== Undertow 2.0 Released
+
+Undertow 2.0 has been released. This release contains support for Servlet 4.0,
+which makes it easy to use HTTP/2 features in Servlet applications.
+
+In general it should be backwards compatible with Undertow 1.4, which the exception of
+dropping support for JDK7.
