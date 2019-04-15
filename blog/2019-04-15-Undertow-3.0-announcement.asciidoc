@@ -1,0 +1,61 @@
+---
+layout: project-blog
+---
+
+= Undertow 3.0 Announcement
+Stuart Douglas
+:Author:    Stuart Douglas
+:Email:     <sdouglas@redhat.com>
+:Date:      2019-04-15
+:Revision:  1.0
+
+
+== Undertow 3.0 Announcement
+
+The Java network programming world has come a long way since Undertow was first started. Netty has emerged as the de-facto standard for network programming in Java, and the Undertow team has decided that the benefits of utilizing Netty outweigh any benefits in keeping our XNIO based transport layer.
+
+Undertow 3.0 will keep Undertow’s programming model, however the underlying transport will be changed from XNIO to Netty. We will also use the Netty HTTP/1, HTTP/2 and Websocket implementations. We believe this change will have a number of advantages:
+
+It will allow other Netty based services (e.g GRPC) to share the same HTTP port
+It allows sharing of threads between Undertow and other Netty based services, resulting in services using less resources
+The underlying transport implementation are the most complex part of Undertow, delegating this to Netty will significantly reduce the work needed to maintain Undertow
+
+As part of this Flavia Rainone will be taking over as project lead from Stuart Douglas so he can focus on the recently announced Quarkus project, however Stuart will continue to be heavily involved in Undertow for the foreseeable future.
+
+Flavia Rainone has been involved in JBoss community since 2002 and has an extensive background on Remoting and Xnio. In the past years, she acted as EJB component lead for Wildfly,  besides contributing to several projects in Wildfly, such as IronJacamar, JBoss MSC and XNIO, and also Byteman. All this makes her a good fit for taking over Undertow leadership.
+
+
+=== What does this mean for me?
+
+What this means for you will depend on which parts of Undertow you are using:
+
+If you are using the Servlet API then you will likely not notice any change. You will need some different dependencies (Netty instead of XNIO), however the rest of the experience should be mostly identical
+If you are using the low level Undertow HttpHandler and HttpServerExchange then you will need to migrate your application. For the most part this migration should be straightforward, as most concepts from the old API directly map to the new API.
+
+=== Road Map
+
+==== 2.x
+
+The existing Undertow 2.x branch will continue to be maintained for the foreseeable future. It will receive bug and security fixes, and some features, however it is unlikely to receive any more low level transport oriented features (e.g. HTTP/3 support). For now it is a perfectly valid choice to stay on Undertow 2 while the new Netty based implementation matures.
+
+==== 3.x
+
+A 3.0 final version should be released in the next few months, however in the short term the 3.x branch will not provide the same level of API compatibility that Undertow has traditionally provided. As the Netty implementation is new this will allow us to potentially fix any issues we find with our approach without being locked in to supporting an API that is not ideal.
+
+This is a great time to try out the new API and report and problems or suggestions. Note that this is explicitly referring to the core HttpServerExchange based API, no major plans are expected to the Servlet API (i.e. ServletExtension and DeploymentInfo).
+
+==== 4.x
+
+After a short 3.x cycle we are planning on releasing a 4.x that will provide API stability, in the same way that Undertow 1.x and 2.x have.
+
+=== How can I contribute
+
+You can contribute to Undertow in the same way it has always been done.
+
+We have an email list open for discussion here: undertow-dev@lists.jboss.org
+
+Jira issues can be accessed here: https://issues.jboss.org/projects/UNDERTOW/issues
+
+And source code for 3.x is here: https://github.com/undertow-io/undertow/tree/3.0.x
+
+Also, with the move from HipChat to Zulip in Wildfly team, you can now access Undertow stream via Zulip at https://wildfly.zulipchat.com/
