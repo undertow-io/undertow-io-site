@@ -9,9 +9,6 @@ Stuart Douglas
 :Date:      2019-04-15
 :Revision:  1.0
 
-
-== Undertow 3.0 Announcement
-
 The Java network programming world has come a long way since Undertow was first started. Netty has emerged as the de-facto standard for network programming in Java, and the Undertow team has decided that the benefits of utilizing Netty outweigh any benefits in keeping our XNIO based transport layer.
 
 Undertow 3.0 will keep Undertow’s programming model, however the underlying transport will be changed from XNIO to Netty. We will also use the Netty HTTP/1, HTTP/2 and Websocket implementations. We believe this change will have a number of advantages:
