@@ -56,6 +56,6 @@ We have an email list open for discussion here: undertow-dev@lists.jboss.org
 
 Jira issues can be accessed here: https://issues.jboss.org/projects/UNDERTOW/issues
 
-And source code for 3.x is here: https://github.com/undertow-io/undertow/tree/3.0.x
+And source code for 3.x is here: https://github.com/undertow-io/undertow/tree/3.x
 
 Also, with the move from HipChat to Zulip in Wildfly team, you can now access Undertow stream via Zulip at https://wildfly.zulipchat.com/
