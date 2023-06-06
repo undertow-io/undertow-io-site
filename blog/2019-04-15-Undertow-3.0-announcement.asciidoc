@@ -19,7 +19,7 @@ The underlying transport implementation are the most complex part of Undertow, d
 
 As part of this Flavia Rainone will be taking over as project lead from Stuart Douglas so he can focus on the recently announced Quarkus project, however Stuart will continue to be heavily involved in Undertow for the foreseeable future.
 
-Flavia Rainone has been involved in JBoss community since 2002 and has an extensive background on Remoting and Xnio. In the past years, she acted as EJB component lead for Wildfly,  besides contributing to several projects in Wildfly, such as IronJacamar, JBoss MSC and XNIO, and also Byteman. All this makes her a good fit for taking over Undertow leadership.
+Flavia Rainone has been involved in JBoss community since 2002 and has an extensive background on Remoting and Xnio. In the past years, she acted as EJB component lead for WildFly,  besides contributing to several projects in WildFly, such as IronJacamar, JBoss MSC and XNIO, and also Byteman. All this makes her a good fit for taking over Undertow leadership.
 
 
 === What does this mean for me?
@@ -55,4 +55,4 @@ Jira issues can be accessed here: https://issues.jboss.org/projects/UNDERTOW/iss
 
 And source code for 3.x is here: https://github.com/undertow-io/undertow/tree/3.x
 
-Also, with the move from HipChat to Zulip in Wildfly team, you can now access Undertow stream via Zulip at https://wildfly.zulipchat.com/
+Also, with the move from HipChat to Zulip in WildFly team, you can now access Undertow stream via Zulip at https://wildfly.zulipchat.com/

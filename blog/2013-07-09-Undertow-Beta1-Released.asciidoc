@@ -10,7 +10,7 @@ Stuart Douglas
 :Date:      2013-07-09
 :Revision:  1.0
 
-Undertow is a high performance non-blocking webserver that is the new web server in Wildfly.
+Undertow is a high performance non-blocking webserver that is the new web server in WildFly.
 
 Some notable features include:
 
