@@ -14,9 +14,9 @@ Downloads
 ---------
 
 The easiest way to get started using Undertow is to download the
-link:http://www.wildfly.org/downloads/[Wildfly Application Server].
+link:http://www.wildfly.org/downloads/[WildFly Application Server].
 
-Undertow is the default web server in Wildfly, so usage is as simple as deploying a war.
+Undertow is the default web server in WildFly, so usage is as simple as deploying a war.
 
 Maven
 ~~~~~
