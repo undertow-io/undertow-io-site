@@ -1,3 +1,10 @@
+<style>
+    .navbar .nav-link.active {
+        color: #fff !important;
+        font-weight: bold;
+        border-bottom: 2px solid #cc0000;
+    }
+</style>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
     <div class="container">
         <a class="navbar-brand" href="{{ site.Home.RelPermalink }}">Undertow</a>
@@ -10,16 +17,16 @@
                     <a class="nav-link{{ if .IsHome }} active{{ end }}" href="{{ site.Home.RelPermalink }}">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link{{ if hasPrefix .RelPermalink "/blog" }} active{{ end }}" href="{{ "blog/" | relURL }}">Blog</a>
+                    <a class="nav-link{{ if and (not .IsHome) (.Page.FirstSection) (eq .Page.FirstSection.Title "Blog") }} active{{ end }}" href="{{ "blog/" | relURL }}">Blog</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link{{ if eq .RelPermalink "/downloads/" }} active{{ end }}" href="{{ "downloads/" | relURL }}">Download</a>
+                    <a class="nav-link{{ if and (.Page.FirstSection) (eq .Page.FirstSection.Title "Downloads") }} active{{ end }}" href="{{ "downloads/" | relURL }}">Download</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link{{ if hasPrefix .RelPermalink "/documentation" }} active{{ end }}" href="{{ "documentation/" | relURL }}">Documentation</a>
+                    <a class="nav-link{{ if and (.Page.FirstSection) (eq .Page.FirstSection.Title "Documentation") }} active{{ end }}" href="{{ "documentation/" | relURL }}">Documentation</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link{{ if eq .RelPermalink "/get-involved/" }} active{{ end }}" href="{{ "get-involved/" | relURL }}">Get Involved</a>
+                    <a class="nav-link{{ if and (.Page.FirstSection) (eq .Page.FirstSection.Title "Get Involved") }} active{{ end }}" href="{{ "get-involved/" | relURL }}">Get Involved</a>
                 </li>
             </ul>
         </div>
