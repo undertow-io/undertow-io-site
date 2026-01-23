@@ -17,16 +17,16 @@
                     <a class="nav-link{{ if .IsHome }} active{{ end }}" href="{{ site.Home.RelPermalink }}">Home</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link{{ if and (not .IsHome) (.Page.FirstSection) (eq .Page.FirstSection.Title "Blog") }} active{{ end }}" href="{{ "blog/" | relURL }}">Blog</a>
+                    <a class="nav-link{{ if eq .Section "blog" }} active{{ end }}" href="{{ "blog/" | relURL }}">Blog</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link{{ if and (.Page.FirstSection) (eq .Page.FirstSection.Title "Downloads") }} active{{ end }}" href="{{ "downloads/" | relURL }}">Download</a>
+                    <a class="nav-link{{ if eq .File.ContentBaseName "downloads" }} active{{ end }}" href="{{ "downloads/" | relURL }}">Download</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link{{ if and (.Page.FirstSection) (eq .Page.FirstSection.Title "Documentation") }} active{{ end }}" href="{{ "documentation/" | relURL }}">Documentation</a>
+                    <a class="nav-link{{ if eq .Section "documentation" }} active{{ end }}" href="{{ "documentation/" | relURL }}">Documentation</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link{{ if and (.Page.FirstSection) (eq .Page.FirstSection.Title "Get Involved") }} active{{ end }}" href="{{ "get-involved/" | relURL }}">Get Involved</a>
+                    <a class="nav-link{{ if eq .File.ContentBaseName "get-involved" }} active{{ end }}" href="{{ "get-involved/" | relURL }}">Get Involved</a>
                 </li>
             </ul>
         </div>
