@@ -1,0 +1,126 @@
+{{/* Get the current version from the URL path */}}
+{{ $currentVersion := "2.0.0" }}
+{{ $pathParts := split .RelPermalink "/" }}
+{{ if and (ge (len $pathParts) 3) (index $pathParts 2) }}
+    {{ $ver := index $pathParts 2 }}
+    {{ if or (eq $ver "2.0.0") (eq $ver "1.4.0") (eq $ver "1.3.0") }}
+        {{ $currentVersion = $ver }}
+    {{ end }}
+{{ end }}
+
+{{/* Get all available versions */}}
+{{ $versions := slice "2.0.0" "1.4.0" "1.3.0" }}
+
+{{/* Get the current page name for active highlighting */}}
+{{ $currentPage := .File.BaseFileName }}
+
+<div class="pt-3 px-3">
+    <!-- Version selector -->
+    <label for="version-select" class="form-label fw-bold">Version</label>
+    <select class="form-select mb-3" id="version-select" onchange="switchVersion(this.value)">
+        {{ range $versions }}
+        <option value="{{ . }}"{{ if eq . $currentVersion }} selected{{ end }}>{{ . }}</option>
+        {{ end }}
+    </select>
+
+    <!-- Navigation -->
+    <nav class="nav flex-column">
+        {{/* Introduction section */}}
+        <span class="nav-section">Introduction</span>
+        {{ with .Site.GetPage (printf "/documentation/%s/introduction" $currentVersion) }}
+        <a class="nav-link{{ if eq $currentPage "introduction" }} active{{ end }}" href="{{ .RelPermalink }}">Introduction</a>
+        {{ end }}
+        {{ with .Site.GetPage (printf "/documentation/%s/getting-undertow" $currentVersion) }}
+        <a class="nav-link{{ if eq $currentPage "getting-undertow" }} active{{ end }}" href="{{ .RelPermalink }}">Getting Undertow</a>
+        {{ end }}
+
+        {{/* Core section */}}
+        <span class="nav-section">Undertow Core</span>
+        {{ with .Site.GetPage (printf "/documentation/%s/bootstrapping" $currentVersion) }}
+        <a class="nav-link{{ if eq $currentPage "bootstrapping" }} active{{ end }}" href="{{ .RelPermalink }}">Bootstrapping</a>
+        {{ end }}
+        {{ with .Site.GetPage (printf "/documentation/%s/overview" $currentVersion) }}
+        <a class="nav-link{{ if eq $currentPage "overview" }} active{{ end }}" href="{{ .RelPermalink }}">Architecture Overview</a>
+        {{ end }}
+        {{ with .Site.GetPage (printf "/documentation/%s/listeners" $currentVersion) }}
+        <a class="nav-link{{ if eq $currentPage "listeners" }} active{{ end }}" href="{{ .RelPermalink }}">Listeners</a>
+        {{ end }}
+        {{ with .Site.GetPage (printf "/documentation/%s/built-in-handlers" $currentVersion) }}
+        <a class="nav-link{{ if eq $currentPage "built-in-handlers" }} active{{ end }}" href="{{ .RelPermalink }}">Built-in Handlers</a>
+        {{ end }}
+        {{ with .Site.GetPage (printf "/documentation/%s/undertow-handler-guide" $currentVersion) }}
+        <a class="nav-link{{ if eq $currentPage "undertow-handler-guide" }} active{{ end }}" href="{{ .RelPermalink }}">Handler Guide</a>
+        {{ end }}
+        {{ with .Site.GetPage (printf "/documentation/%s/undertow-request-lifecycle" $currentVersion) }}
+        <a class="nav-link{{ if eq $currentPage "undertow-request-lifecycle" }} active{{ end }}" href="{{ .RelPermalink }}">Request Lifecycle</a>
+        {{ end }}
+        {{ with .Site.GetPage (printf "/documentation/%s/error-handling" $currentVersion) }}
+        <a class="nav-link{{ if eq $currentPage "error-handling" }} active{{ end }}" href="{{ .RelPermalink }}">Error Handling</a>
+        {{ end }}
+        {{ with .Site.GetPage (printf "/documentation/%s/security" $currentVersion) }}
+        <a class="nav-link{{ if eq $currentPage "security" }} active{{ end }}" href="{{ .RelPermalink }}">Security</a>
+        {{ end }}
+        {{ with .Site.GetPage (printf "/documentation/%s/predicates-attributes-handlers" $currentVersion) }}
+        <a class="nav-link{{ if eq $currentPage "predicates-attributes-handlers" }} active{{ end }}" href="{{ .RelPermalink }}">Predicates and Handlers</a>
+        {{ end }}
+        {{ with .Site.GetPage (printf "/documentation/%s/reverse-proxy" $currentVersion) }}
+        <a class="nav-link{{ if eq $currentPage "reverse-proxy" }} active{{ end }}" href="{{ .RelPermalink }}">Reverse Proxy</a>
+        {{ end }}
+        {{ with .Site.GetPage (printf "/documentation/%s/websockets" $currentVersion) }}
+        <a class="nav-link{{ if eq $currentPage "websockets" }} active{{ end }}" href="{{ .RelPermalink }}">WebSockets</a>
+        {{ end }}
+
+        {{/* Servlet section */}}
+        <span class="nav-section">Undertow Servlet</span>
+        {{ with .Site.GetPage (printf "/documentation/%s/servlet-deployment" $currentVersion) }}
+        <a class="nav-link{{ if eq $currentPage "servlet-deployment" }} active{{ end }}" href="{{ .RelPermalink }}">Servlet Deployment</a>
+        {{ end }}
+        {{ with .Site.GetPage (printf "/documentation/%s/servlet-extensions" $currentVersion) }}
+        <a class="nav-link{{ if eq $currentPage "servlet-extensions" }} active{{ end }}" href="{{ .RelPermalink }}">Servlet Extensions</a>
+        {{ end }}
+        {{ with .Site.GetPage (printf "/documentation/%s/servlet-using-non-blocking-handlers" $currentVersion) }}
+        <a class="nav-link{{ if eq $currentPage "servlet-using-non-blocking-handlers" }} active{{ end }}" href="{{ .RelPermalink }}">Non-blocking Handlers</a>
+        {{ end }}
+        {{ with .Site.GetPage (printf "/documentation/%s/servlet-security" $currentVersion) }}
+        <a class="nav-link{{ if eq $currentPage "servlet-security" }} active{{ end }}" href="{{ .RelPermalink }}">Servlet Security</a>
+        {{ end }}
+        {{ with .Site.GetPage (printf "/documentation/%s/servlet-advanced" $currentVersion) }}
+        <a class="nav-link{{ if eq $currentPage "servlet-advanced" }} active{{ end }}" href="{{ .RelPermalink }}">Advanced Servlet</a>
+        {{ end }}
+        {{ with .Site.GetPage (printf "/documentation/%s/servlet-jsp" $currentVersion) }}
+        <a class="nav-link{{ if eq $currentPage "servlet-jsp" }} active{{ end }}" href="{{ .RelPermalink }}">JSP</a>
+        {{ end }}
+
+        {{/* Undertow.js section - only show if page exists */}}
+        {{ with .Site.GetPage (printf "/documentation/%s/undertow-js" $currentVersion) }}
+        <span class="nav-section">Undertow.js</span>
+        <a class="nav-link{{ if eq $currentPage "undertow-js" }} active{{ end }}" href="{{ .RelPermalink }}">Undertow.js</a>
+        {{ end }}
+
+        {{/* Other */}}
+        <span class="nav-section">Other</span>
+        {{ with .Site.GetPage (printf "/documentation/%s/faq" $currentVersion) }}
+        <a class="nav-link{{ if eq $currentPage "faq" }} active{{ end }}" href="{{ .RelPermalink }}">FAQ</a>
+        {{ end }}
+        {{ with .Site.GetPage (printf "/documentation/%s/undertow-design-doc" $currentVersion) }}
+        <a class="nav-link{{ if eq $currentPage "undertow-design-doc" }} active{{ end }}" href="{{ .RelPermalink }}">Design Document</a>
+        {{ end }}
+    </nav>
+</div>
+
+<script>
+var baseURL = {{ "/" | relURL | safeJS }};
+function switchVersion(newVersion) {
+    // Get current path
+    var path = window.location.pathname;
+    // Check if we're on a versioned page or the landing page
+    if (path.match(/\/documentation\/[0-9]+\.[0-9]+\.[0-9]+\//)) {
+        // Replace version in path
+        var newPath = path.replace(/(\/documentation\/)[^\/]+\//, '$1' + newVersion + '/');
+        window.location.href = newPath;
+    } else {
+        // On landing page, go to version index
+        window.location.href = baseURL + 'documentation/' + newVersion + '/';
+    }
+}
+</script>
