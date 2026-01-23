@@ -1,0 +1,51 @@
+{{ define "main" }}
+<main class="mt-4">
+    <h1>{{ .Title }}</h1>
+
+    {{ $paginator := .Paginate .Pages }}
+    {{ range $paginator.Pages }}
+    <article class="post mb-5">
+        <header class="mb-3">
+            <h2 class="title">
+                <a href="{{ .Permalink }}">{{ .Title }}</a>
+            </h2>
+            <div class="text-muted">
+                <span>on {{ .Date.Format "Jan 02, 2006" }}</span>
+                {{ with .Params.author }}
+                <span>by {{ . }}</span>
+                {{ end }}
+            </div>
+        </header>
+        <div class="body">
+            {{ .Content }}
+        </div>
+        <footer>
+            <a href="{{ .Permalink }}">permalink</a>
+        </footer>
+    </article>
+    {{ end }}
+
+    <!-- Pagination -->
+    <nav aria-label="Blog pagination">
+        <ul class="pager d-flex justify-content-between list-unstyled">
+            <li class="previous{{ if not $paginator.HasPrev }} disabled{{ end }}">
+                {{ if $paginator.HasPrev }}
+                <a href="{{ $paginator.Prev.URL }}">&laquo; Newer</a>
+                {{ else }}
+                <span class="text-muted">&laquo; Newer</span>
+                {{ end }}
+            </li>
+            <li class="pages">
+                Page {{ $paginator.PageNumber }} of {{ $paginator.TotalPages }}
+            </li>
+            <li class="next{{ if not $paginator.HasNext }} disabled{{ end }}">
+                {{ if $paginator.HasNext }}
+                <a href="{{ $paginator.Next.URL }}">Older &raquo;</a>
+                {{ else }}
+                <span class="text-muted">Older &raquo;</span>
+                {{ end }}
+            </li>
+        </ul>
+    </nav>
+</main>
+{{ end }}

@@ -1,7 +1,21 @@
-.idea
-*.iml
-.awestruct
-_site
-_tmp
-*~
+# Hugo build output
+public/
+resources/
+
+# Awestruct (legacy)
+_site/
+_tmp/
+.awestruct/
 .sass-cache/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Backup files
+*~

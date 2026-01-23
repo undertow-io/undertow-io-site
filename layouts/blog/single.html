@@ -1,0 +1,21 @@
+{{ define "main" }}
+<main class="mt-4">
+    <article class="post">
+        <header class="mb-4">
+            <h2 class="title">{{ .Title }}</h2>
+            <div class="text-muted">
+                <span>on {{ .Date.Format "Jan 02, 2006" }}</span>
+                {{ with .Params.author }}
+                <span>by {{ . }}</span>
+                {{ end }}
+            </div>
+        </header>
+        <div class="body">
+            {{ .Content }}
+        </div>
+        <footer class="mt-4">
+            <a href="{{ .Permalink }}">permalink</a>
+        </footer>
+    </article>
+</main>
+{{ end }}

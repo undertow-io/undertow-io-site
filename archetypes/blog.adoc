@@ -1,0 +1,10 @@
+---
+title: "{{ replace .Name "-" " " | title }}"
+date: {{ .Date }}
+author: ""
+draft: true
+---
+
+= {{ replace .Name "-" " " | title }}
+
+Write your blog post content here.

@@ -1,0 +1,12 @@
+{{ define "main" }}
+<main class="mt-4">
+    <h1>{{ .Title }}</h1>
+    {{ .Content }}
+    {{ range .Pages }}
+    <article class="mb-4">
+        <h2><a href="{{ .Permalink }}">{{ .Title }}</a></h2>
+        {{ .Summary }}
+    </article>
+    {{ end }}
+</main>
+{{ end }}

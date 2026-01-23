@@ -1,0 +1,24 @@
+baseURL = "https://undertow.io"
+languageCode = "en-us"
+title = "Undertow"
+
+[params]
+  description = "Undertow - Flexible performant web server written in Java"
+  author = "Red Hat"
+
+[markup]
+  [markup.asciidocExt]
+    backend = "html5"
+    [markup.asciidocExt.attributes]
+      source-highlighter = "highlight.js"
+  [markup.highlight]
+    codeFences = true
+    guessSyntax = true
+    noClasses = false
+
+[pagination]
+  pagerSize = 5
+
+[security]
+  [security.exec]
+    allow = ["^(dart-)?sass(-embedded)?$", "^go$", "^git$", "^npx$", "^postcss$", "^tailwindcss$", "^asciidoctor$"]
