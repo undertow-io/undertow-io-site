@@ -1,0 +1,865 @@
+// tag::main[]
+
+=== Predicates Attributes and Handlers
+
+
+====  Introduction
+
+Predicates and Exchange attributes are an abstraction that allow handlers to read, write and make decisions based on
+certain attributes of a request without hard coding this into the handler. These form the basis of Undertow's text
+based handler configuration format. Some examples are shown below:
+
+
+Use the reverse proxy to send all requests to /reports to a different backend server:
+
+[source]
+----
+path-prefix('/reports') -> reverse-proxy({'http://reports1.mydomain.com','http://reports2.mydomain.com'})
+----
+
+Redirect all requests from /a to /b. The first example only redirects if there is an exact match, the later examples
+match all paths that start with /a:
+
+[source]
+----
+path('/a') -> redirect('/b')
+path-prefix('/a') -> redirect('/b${remaining}')
+regex('/a(.*)') -> set(attribute='%{o,Location}', value='/b${1}') -> response-code(302)
+----
+
+==== Exchange Attributes
+
+An exchange attribute represents the value of part of the exchange. For example the path attribute represents the
+request path, the method attribute represents the HTTP. Even though these attributes can be retrieved and modified
+directly this requires a handler to hard code the attribute that they wish to use. For example Undertow provides a
+handler that checks an attribute against an access control list. There are lots of different attributes we may wish
+to check against the ACL (e.g. username, User-Agent header, request path).
+
+==== Predicates
+
+A predicate is a function that takes a value (in this case the `HttpServerExchange`) and returns a true or false value.
+This allows actions to be taken based on the return value of the predicate. In general any handler that needs to make
+a boolean decision based on the exchange should use a predicate to allow for maximum flexibility.
+
+The provided predicate handler can be used to make a decision between which handler to invoke based on the value of a
+predicate.
+
+==== Programmatic Representation of Exchange Attributes
+
+An exchange attribute is represented by the `io.undertow.attribute.ExchangeAttribute` interface:
+
+[source%nowrap,java]
+----
+
+/**
+ * Representation of a string attribute from a HTTP server exchange.
+ */
+public interface ExchangeAttribute {
+
+    /**
+     * Resolve the attribute from the HTTP server exchange. This may return null if the attribute is not present.
+     * @param exchange The exchange
+     * @return The attribute
+     */
+    String readAttribute(final HttpServerExchange exchange);
+
+    /**
+     * Sets a new value for the attribute. Not all attributes are writable.
+     * @param exchange The exchange
+     * @param newValue The new value for the attribute
+     */
+    void writeAttribute(final HttpServerExchange exchange, final String newValue) throws ReadOnlyAttributeException;
+}
+
+----
+
+Undertow provides implementation of a lot of attributes out of the box, most of which can be accessed using the
+`io.undertow.attribute.ExchangeAttributes` utility class. Some of the attributes that are provided include request and
+response headers, cookies, path, query parameters, the current user and more.
+
+==== Programmatic Representation of Predicates
+
+Predicates are represented by the `io.undertow.predicate.Predicate` interface:
+
+[source%nowrap,java]
+----
+/**
+ * A predicate.
+ *
+ * This is mainly uses by handlers as a way to decide if a request should have certain
+ * processing applied, based on the given conditions.
+ */
+public interface Predicate {
+
+    /**
+     * Attachment key that can be used to store additional predicate context that allows the predicates to store
+     * additional information. For example a predicate that matches on a regular expression can place additional
+     * information about match groups into the predicate context.
+     *
+     * Predicates must not rely on this attachment being present, it will only be present if the predicate is being
+     * used in a situation where this information may be required by later handlers.
+     *
+     */
+    AttachmentKey<Map<String, Object>> PREDICATE_CONTEXT = AttachmentKey.create(Map.class);
+
+    boolean resolve(final HttpServerExchange value);
+
+}
+----
+
+Undertow provides built in predicates that can be created using the `io.undertow.predicate.Predicates` utility class.
+This includes basic boolean logic predicates (and, or and not), as well as other useful predicates such as path
+matching (including prefix and suffix based matches), regular expression matching, contains and exists. Many of these
+predicates operate on exchange attributes, so they can be used to match arbitrary parts of the exchange. The following
+example demonstrates a predicate that matches any exchange that has no Content-Type header where the method is POST:
+
+[source%nowrap,java]
+----
+Predicate predicate = Predicates.and(
+        Predicates.not(Predicates.exists(ExchangeAttributes.requestHeader(Headers.CONTENT_TYPE))),
+        Predicates.equals("POST", ExchangeAttributes.requestMethod()));
+----
+
+==== Textual Representation
+
+WARNING: Undertows predicate language is still considered tech preview. Its syntax will likely change in a future version
+as the language is expanded.
+
+All these attributes and predicates are all well and good, but unless there is a way for the end user to configure them
+without resorting to programmatic means they are not super useful. Fortunately Undertow provides a way to do just that.
+
+==== Exchange Attributes
+
+Exchange attributes may have up to two textual representations, a long one and a short one. The long version takes the
+form %{attribute}, while the short version is a percent sign followed by a single character. A list of the built in
+attributes provided by Undertow is below:
+
+[frame="topbot",options="header"]
+|===
+|Attribute                                                                    |Short Form|Long Form
+|Remote IP address                                                            | `%a`     | `%{REMOTE_IP}`
+|Local IP address                                                             | `%A`     | `%{LOCAL_IP}`
+|Bytes sent, excluding HTTP headers, or '-' if no bytes were sent             | `%b`     |
+|Bytes sent, excluding HTTP headers                                           | `%B`     | `%{BYTES_SENT}`
+|Remote host name                                                             | `%h`     | `%{REMOTE_HOST}`
+|Request protocol                                                             | `%H`     | `%{PROTOCOL}`
+|Remote logical username from identd (always returns '-')                     | `%l`     |
+|Request method                                                               | `%m`     | `%{METHOD}`
+|Local port                                                                   | `%p`     | `%{LOCAL_PORT}`
+|Query string (prepended with a '?' if it exists, otherwise an empty string)  | `%q`     | `%{QUERY_STRING}`
+|First line of the request                                                    | `%r`     | `%{REQUEST_LINE}`
+|HTTP status code of the response                                             | `%s`     | `%{RESPONSE_CODE}`
+|Date and time, in Common Log Format format                                   | `%t`     | `%{DATE_TIME}`
+|Remote user that was authenticated                                           | `%u`     | `%{REMOTE_USER}`
+|Requested URL path                                                           | `%U`     | `%{REQUEST_URL}`
+|Request relative path                                                        | `%R`     | `%{RELATIVE_PATH}`
+|Local server name                                                            | `%v`     | `%{LOCAL_SERVER_NAME}`
+|Time taken to process the request, in millis                                 | `%D`     | `%{RESPONSE_TIME}`
+|Time taken to process the request, in seconds                                | `%T`     |
+|Time taken to process the request, in micros                                 |          | `%{RESPONSE_TIME_MICROS}`
+|Time taken to process the request, in nanos                                  |          | `%{RESPONSE_TIME_NANOS}`
+|Current request thread name                                                  | `%I`     | `%{THREAD_NAME}`
+|SSL cypher                                                                   |          | `%{SSL_CIPHER}`
+|SSL client certificate                                                       |          | `%{SSL_CLIENT_CERT}`
+|SSL session id                                                               |          | `%{SSL_SESSION_ID}`
+|Cookie value                                                                 |          | `%{c,cookie_name}`
+|Query parameter                                                              |          | `%{q,query_param_name}`
+|Request header                                                               |          | `%{i,request_header_name}`
+|Response header                                                              |          | `%{o,response_header_name}`
+|Value from the predicate context                                             |          | `${name}`
+|===
+
+Any tokens that do not follow one of the above patterns are assumed to be literals. For example assuming a
+user name of 'Stuart' and a request method of 'GET' the attribute text `Hello %u the request method is %m` will give
+the value +Hello Stuart the request method is GET+.
+
+These attributes are used anywhere that text based configuration is required, e.g. specifying the log pattern in the
+access log.
+
+Some handlers may actually modify these attributes. In order for this to work the attribute must not be read only, and
+must consist of only a single token from the above table.
+
+==== Textual Representation of Predicates
+
+Sometimes it is also useful to have a textual representation of a predicate. For examples when configuring a handler
+in Wildfly we may want it only to run if a certain condition is met, and when doing rewrite handling we generally do
+not want to re-write all requests, only a subset of them.
+
+To this end Undertow provides a way to specify a textual representation of a predicate. In its simplest form, a
+predicate is represented as `predicate-name[name1=value1,name2=value2]`.
+
+For example, the following predicates all match POST requests:
+
+[source]
+----
+method(POST)
+method(value=POST)
+equals({%{METHOD}, POST})
+equals(%m, "POST")
+regex(pattern="POST", value="%m", full-match=true)
+----
+
+Lets examine these a bit more closely. The first one `method(POST)` uses the built in method predicate that matches
+based on the method. As this predicate takes only a single parameter (that is the default parameter) it is not necessary
+to explicitly specify the parameter name. Also note that POST is not quoted, quoting is only necessary if the token
+contains spaces, commas or square braces.
+
+The second example `method(value=POST)` is the same as the first, except that the parameter name is explicitly specified.
+
+The third and fourth examples demonstrates the 'equals' predicate. This predicate actually takes one parameter that is an
+array, and will return true if all items in the array are equal. Arrays are generally enclosed in curly braces, however in
+this case where there is a single parameter that is the default parameter the braces can be omitted.
+
+The final examples shows the use of the regex predicate. This takes 3 parameters, the pattern to match, the value to
+match against and full-match, which determines if the pattern must match the whole value or simply part of it.
+
+Some predicates may also capture additional information about the match and store it in the predicate context. For
+example the regex predicate will store the match under the key '0', and any match groups under the key '1', '2' etc.
+
+These contextual values can then be retrieved by later predicates of handlers using the syntax `${0}`, `${1}` etc.
+
+Predicates can be combined using the boolean operators 'and', 'or' and not. Some examples are shown below:
+
+
+[source]
+----
+not method(POST)
+method(POST) and path-prefix("/uploads")
+path-template(value="/user/{username}/*") and equals(%u, ${username})
+regex(pattern="/user/(.*?)./.*", value=%U, full-match=true) and equals(%u, ${1})
+----
+
+The first predicate will match everything except post requests. The second will match all post requests to /uploads.
+The third predicate will match all requests to URL's of the form /user/{username}/* where the username is equal to the
+username of the currently logged in user. In this case the username part of the URL is captured, and the equals handler
+can retrieve it using the `${username}` syntax shown above. The fourth example is the same as the third, however it uses
+a regex with a match group rather than a path template.
+
+The complete list of built in predicates is shown below:
+
+
+[frame="topbot",options="header"]
+|===
+|Name           | Parameters  | Default Parameter | Additional context
+|auth-required	|	|	|
+|contains	|search: String[] (required), value: attribute (required)	|	|
+|directory	|value: attribute	|value	| Only usable within the scope of Servlet deployment
+|dispatcher	|value: String (required)	|value	| Only usable within the scope of Servlet deployment
+|equals	|value: attribute[] (required)	|value	|
+|exists	|value: attribute (required)	|value	|
+|file	|value: attribute	|value	| Only usable within the scope of Servlet deployment
+|max-content-size	|value: Long (required)	|value	|
+|method	|value: String[] (required)	|value	|
+|min-content-size	|value: Long (required)	|value	|
+|path	|path: String[] (required)	|path	|
+|path-prefix	|path: String[] (required)	|path	| Unmatched under ${remaining}
+|path-suffix	|path: String[] (required)	|path	|
+|path-template	|match: attribute, value: String (required)	|value	| Path template elements under the name
+|regex	|case-sensitive: Boolean, full-match: Boolean, pattern: String (required), value: attribute	|pattern	| Match groups under number
+|secure	|	|	|
+|===
+
+==== Textual Representation of Handlers
+
+Handlers are represented in a similar way to predicates. Handlers and predicates are combined into the Undertow predicate
+language.
+
+The general form of this language is `predicate -> handler`. If the predicate evaluates to true the handler is executes.
+If there is only a handler present then the handler is always executed. Handlers are executed in order and separated
+by line breaks or semi colons. Curly braces can be used to create a sub grouping, with all handlers (and possibly predicates)
+in the sub grouping being executed. The 'else' keyword can be used to execute a different handler or sub grouping if the
+predicate evaluates to false. Sub grouping can contain other predicates and sub groupings.
+
+The 'restart' handler is a special handler that will restart execution at the beginning of the predicated handler list.
+The 'done' handler will skip any remaining rules.
+
+Some examples are below:
+
+
+[source]
+----
+path(/skipallrules) and true -> done
+method(GET) -> set(attribute='%{o,type}', value=get)
+regex('(.*).css') -> { rewrite('${1}.xcss'); set(attribute='%{o,chained}', value=true) }
+regex('(.*).redirect$') -> redirect('${1}.redirected')
+set(attribute='%{o,someHeader}', value=always)
+path-template('/foo/{bar}/{f}') -> set[attribute='%{o,template}', value='${bar}')
+path-template('/bar->foo') -> {
+    redirect(/);
+} else {
+    path(/some-other-path) -> header(header=my-header,value=my-value)
+}
+regex('(.*).css') -> set(attribute='%{o,css}', value='true') else set(attribute='%{o,css}', value='false');
+path(/restart) -> {
+    rewrite(/foo/a/b);
+    restart;
+}
+----
+
+== Built in Handlers
+
+=== Access Log Handler
+
+|===
+| Name: | access-log
+| Class: |  io.undertow.server.handlers.accesslog.AccessLogHandler
+| Parameters: | format: String (required)
+| Default Parameter | format
+|===
+
+A handler that will log access attempts to JBoss Logging. The output can be configured via
+the format parameter which takes exchange attributes.
+
+=== Access Control Handler
+
+|===
+| Name: | access-control
+| Class: |  io.undertow.server.handlers.AccessControlListHandler
+| Parameters: | acl: String[] (required), default-allow: boolean, attribute: ExchangeAttribute (required)
+| Default Parameter |
+|===
+
+This handler is used to specify access control lists. These lists consist of an array of strings, which
+follow the format `{pattern} allow|deny`, where {pattern} is a regular expression. These rules are applied
+against the specified exchange attribute until a match is found. If the result in `deny` then the request
+is rejected with a 403 response, otherwise the next handler is invoked.
+
+If no match is found the default behaviour is to deny.
+
+=== Allowed Methods
+
+|===
+| Name: | allowed-methods
+| Class: |  io.undertow.server.handlers.AllowedMethodsHandler
+| Parameters: | methods: String[] (required)
+| Default Parameter | methods
+|===
+
+This handler takes a list of allowed methods. If an incoming request's method is in the specific method
+list then the request is allowed, otherwise it is rejected with a 405 response (method not allowed).
+
+=== Blocking Handler
+
+|===
+| Name: | blocking
+| Class: |  io.undertow.server.handlers.BlockingHandler
+| Parameters: |
+| Default Parameter |
+|===
+
+This handler will mark the request as blocking and dispatch it to the XNIO worker thread.
+
+=== Buffer Request Handler
+
+|===
+| Name: | buffer-request
+| Class: |  io.undertow.server.handlers.RequestBufferingHandler
+| Parameters: | buffers: int (required)
+| Default Parameter | buffers
+|===
+
+This handler will pause request processing while it attempts to read the request body. It uses Undertow
+buffers to store the request body, so the amount of data that can be buffered is determined by the
+buffer size multiplied by the `buffers` parameter.
+
+Once either all data is read or the configured maximum amount of data has been read then the next handler
+will be invoked.
+
+This can be very useful when use a blocking processing model, as the request will be read using non-blocking IO,
+and as the request will not be dispatched to the thread pool until the data has been read.
+
+=== Byte Range Handler
+
+|===
+| Name: | byte-range
+| Class: |  io.undertow.server.handlers.ByteRangeHandler
+| Parameters: | send-accept-ranges: boolean
+| Default Parameter | send-accept-ranges
+|===
+
+A handler that adds generic support for range requests. This handler will work with any request, however in
+general it is less efficient than supporting range requests directly, as the full response will be generated
+and then pieces that are not requested will be discarded. Nonetheless for dynamic content this is often
+the only way to fully support ranges.
+
+If the handler that generated the response already handled the range request then this handler will have
+no effect.
+
+By default the `Accept-Range` header will not be appended to responses, unless the `send-accept-ranges`
+parameter is true.
+
+=== Canonical Path Handler
+
+|===
+| Name: | canonical-path
+| Class: |  io.undertow.server.handlers.CanonicalPathHandler
+| Parameters: |
+| Default Parameter |
+|===
+
+Handler that turns a path into a canonical path by resolving `../` and `./` segments. If these segments
+result in a path that would be outside the root then these segments are simply discarded.
+
+This can help prevent directory traversal attacks, as later handlers will only every see a path that
+is not attempting to escape the server root.
+
+=== Clear Handler
+
+|===
+| Name: | clear
+| Class: |  io.undertow.server.handlers.SetAttributeHandler
+| Parameters: | attribute: ExchangeAttribute (required)
+| Default Parameter | attribute
+|===
+
+A special form of the set-attribute handler that sets an attribute to null.
+
+=== Compress Handler
+
+|===
+| Name: | compress
+| Class: |  io.undertow.server.handlers.encoding.EncodingHandler
+| Parameters: |
+| Default Parameter |
+|===
+
+A handler that adds support for deflate and gzip compression.
+
+=== Disable Cache Handler
+
+|===
+| Name: | disable-cache
+| Class: |  io.undertow.server.handlers.DisableCacheHandler
+| Parameters: |
+| Default Parameter |
+|===
+
+A handler that will set headers to disable the browser cache. The headers that are set are:
+
+* `Cache-Control: no-cache, no-store, must-revalidate`
+* `Pragma: no-cache`
+* `Expires: 0`
+
+=== Disallowed Methods Handler
+
+|===
+| Name: | disallowed-methods
+| Class: |  io.undertow.server.handlers.DisallowedMethodsHandler
+| Parameters: | methods: String[] (required)
+| Default Parameter | methods
+|===
+
+This handler takes a list of disallowed methods. If an incoming request's method is in the specific method
+list then the request is rejected with a 405 response (method not allowed), otherwise it is allowed.
+
+=== Done Handler
+
+|===
+| Name: | done
+| Class: |  N/A
+| Parameters: |
+| Default Parameter |
+|===
+
+This is a pseudo handler that will finish execution of the current predicated handlers, and invoke
+whatever handler is configured after the current predicated handlers block.
+
+=== Request Dumping Handler
+
+|===
+| Name: | dump-request
+| Class: | io.undertow.server.handlers.RequestDumpingHandler
+| Parameters: |
+| Default Parameter |
+|===
+
+A handler that will dump all relevant details from a request to the log. As this is quite expensive a
+predicate should generally be used to control which requests are dumped.
+
+=== Eager Form Parsing Handler
+
+|===
+| Name: | eager-form-parser
+| Class: | io.undertow.server.handlers.form.EagerFormParsingHandler
+| Parameters: |
+| Default Parameter |
+|===
+
+Handler that eagerly parses form data. The request chain will pause while the data is being read,
+and then continue when the form data is fully passed.
+
+NOTE: This is not strictly compatible with servlet, as it removes the option for the user to
+parse the request themselves. It also removes the option to control the charset that the
+request will be decoded to.
+
+=== Error File Handler
+
+|===
+| Name: | error-file
+| Class: | io.undertow.server.handlers.error.FileErrorPageHandler
+| Parameters: | file: String (required), response-codes: int[] (required)
+| Default Parameter |
+|===
+
+A handler that will respond with a file based error page if the request has finished with one of the
+specified error codes and no response body has been generated.
+
+=== Forwarded Handler
+
+|===
+| Name: | forwarded
+| Class: | io.undertow.server.handlers.ForwardedHandler
+| Parameters: |
+| Default Parameter |
+|===
+
+This handler implements rfc7239 and handles the `Forwarded` header. It does this by updating the
+exchange so its peer and local addresses reflect the values in the header.
+
+This should only be installed behind a reverse proxy that has been configured to send the `Forwarded`
+header, otherwise a remote user can spoof their address by sending a header with bogus values.
+
+In general either this handler or `proxy-peer-address` handler should be used, they should not both
+be installed at once.
+
+
+=== Header Handler
+
+|===
+| Name: | header
+| Class: | io.undertow.server.handlers.SetHeaderHandler
+| Parameters: | header: String (required), value: ExchangeAttribute (required)
+| Default Parameter |
+|===
+
+The handler sets a response header with the given name and value.
+
+=== Http Continue Accepting Handler
+
+|===
+| Name: | http-continue-accept
+| Class: | io.undertow.server.handlers.HttpContinueAcceptingHandler
+| Parameters: |
+| Default Parameter |
+|===
+
+A handler that will respond to requests that expect a 100-continue response.
+
+=== IP Access Control Handler
+
+|===
+| Name: | ip-access-control
+| Class: | io.undertow.server.handlers.IPAddressAccessControlHandler
+| Parameters: | acl: String[] (required), default-allow: boolean, failure-status: int
+| Default Parameter | acl
+|===
+
+A handler that provided IP based access control. The ACL list is of the form `{pattern} allow|deny`, where
+{pattern} can be one of the following (both IPv4 and IPv6 are accepted):
+
+* An exact IP address (e.g. 192.168.0.1)
+* An Wildcard IP address (e.g. 192.168.0.*)
+* A Wildcard in slash notation: (e.g. 192.168.0.0/24)
+
+By default anything that is not matched will be denied.
+
+The `failure-status` param allows you to set the response code to be set on failure, `403` will be sent
+by default.
+
+=== JVM Route Handler
+
+|===
+| Name: | jvm-route
+| Class: | io.undertow.server.JvmRouteHandler
+| Parameters: | session-cookie-name: String, value: String (required)
+| Default Parameter | value
+|===
+
+A handler that appends a specified JVM route to session cookie values. This can enable sticky sessions
+for load balancers that support it.
+
+=== Learning Push Handler
+
+|===
+| Name: | learning-push
+| Class: | io.undertow.server.handlers.LearningPushHandler
+| Parameters: | max-age: int, max-entries: int
+| Default Parameter |
+|===
+
+=== Mark Secure Handler
+
+|===
+| Name: | mark-secure
+| Class: | io.undertow.servlet.handlers.MarkSecureHandler
+| Parameters: |
+| Default Parameter |
+|===
+
+A handler that will mark a request as secure. This means that `javax.servlet.ServletRequest#isSecure()`
+will return true, and the security layer will consider the request as being sent over a confidential
+channel.
+
+=== Path Separator Handler
+
+|===
+| Name: | path-separator
+| Class: | io.undertow.server.handlers.PathSeparatorHandler
+| Parameters: |
+| Default Parameter |
+|===
+
+A handler that only takes effect on windows systems (or other systems that do not use '/' as the path
+separator character). Any instances of the path seperator character in the URL are replaced with a '/'.
+
+=== Proxy Peer Address Handler
+
+|===
+| Name: | proxy-peer-address
+| Class: | io.undertow.server.handlers.ProxyPeerAddressHandler
+| Parameters: |
+| Default Parameter |
+|===
+
+A handler that handles `X-Forwarded-*` headers by updating the values on the current exchange to match
+what was sent in the header.
+
+This should only be installed behind a reverse proxy that has been configured to send the `X-Forwarded-*`
+header, otherwise a remote user can spoof their address by sending a header with bogus values.
+
+The headers that are read are:
+
+* `X-Forwarded-For`
+* `X-Forwarded-Proto`
+* `X-Forwarded-Host`
+* `X-Forwarded-Port`
+
+In general either this handler or `forwarded` handler should be used, they should not both
+be installed at once.
+
+=== Redirect Handler
+
+|===
+| Name: | redirect
+| Class: | io.undertow.server.handlers.RedirectHandler
+| Parameters: | value: ExchangeAttribute (required)
+| Default Parameter | value
+|===
+
+A handler that will redirect to the location specified by value.
+
+=== Request Limiting Handler
+
+|===
+| Name: | request-limit
+| Class: | io.undertow.server.handlers.RequestLimitingHandler
+| Parameters: | requests: int (required)
+| Default Parameter | requests
+|===
+
+A handler that will limit the number of concurrent requests to the limit specified, requests that
+exceed the limit will be queued.
+
+=== Resolve Local Name Handler
+
+|===
+| Name: | resolve-local-name
+| Class: | io.undertow.server.handlers.LocalNameResolvingHandler
+| Parameters: |
+| Default Parameter |
+|===
+
+A handler that will resolve the exchange destination address, if it is not already resolved.
+
+=== Resolve Peer Name Handler
+
+|===
+| Name: | resolve-peer-name
+| Class: | io.undertow.server.handlers.PeerNameResolvingHandler
+| Parameters: |
+| Default Parameter |
+|===
+
+A handler that will resolve the exchange source address, if it is not already resolved.
+
+
+=== Resource Handler
+
+|===
+| Name: | resource
+| Class: | io.undertow.server.handlers.resource.ResourceHandler
+| Parameters: | allow-listing: boolean, location: String (required)
+| Default Parameter | location
+|===
+
+A handler that will serve files from the local file system at the specified location.
+
+=== Response Code Handler
+
+|===
+| Name: | response-code
+| Class: | io.undertow.server.handlers.ResponseCodeHandler
+| Parameters: | value: int (required)
+| Default Parameter | value
+|===
+
+A handler that sets the specified status code and then ends the exchange.
+
+=== Response Rate Limiting Handler
+
+|===
+| Name: | response-rate-limit
+| Class: | io.undertow.server.handlers.ResponseRateLimitingHandler
+| Parameters: | bytes: int (required), time: long (required)
+| Default Parameter |
+|===
+
+A handler that limits the speed of responses. This speed is set in terms of bytes per time block.
+
+The time block is specified in MS, so if you wanted a limit of 1kb per second you would set
+bytes to 1024 and time to 1000.
+
+=== Restart Handler
+
+|===
+| Name: | restart
+| Class: | N\A
+| Parameters: |
+| Default Parameter |
+|===
+
+A pseudo handler that restarts execution of the current predicated handler block. Care must be taken
+to avoid infinite loops, usually by making sure that the exchange has been modified in such a way
+that it will not end up on the restart handler before calling restart.
+
+=== Reverse Proxy Handler
+
+|===
+| Name: | reverse-proxy
+| Class: | io.undertow.server.handlers.proxy.ProxyHandler
+| Parameters: | hosts: String[] (required), rewrite-host-header: Boolean
+| Default Parameter | hosts
+|===
+
+A handler that will proxy requests to the specified hosts, using round-robin based load balancing.
+
+=== Rewrite Handler
+
+|===
+| Name: | rewrite
+| Class: | io.undertow.server.handlers.SetAttributeHandler
+| Parameters: | value: ExchangeAttribute (required)
+| Default Parameter | value
+|===
+
+A handler that rewrites the current path.
+
+=== Set Attribute Handler
+
+|===
+| Name: | set
+| Class: | io.undertow.server.handlers.SetAttributeHandler
+| Parameters: | attribute: ExchangeAttribute (required), value: ExchangeAttribute (required)
+| Default Parameter |
+|===
+
+A handler that can be used to set any writable attribute on the exchange.
+
+=== Secure Cookie Handler
+
+
+|===
+| Name: | secure-cookie
+| Class: | io.undertow.server.handlers.SecureCookieHandler
+| Parameters: |
+| Default Parameter |
+|===
+
+A handler that will mark any cookies that are set over a secure channel as being secure cookies.
+
+=== SSL Headers Handler
+
+|===
+| Name: | ssl-headers
+| Class: | io.undertow.server.handlers.SSLHeaderHandler
+| Parameters: |
+| Default Parameter |
+|===
+
+A handler that will set SSL information on the connection based on headers received from the load balancer.
+
+This is for situations where SSL is terminated at the load balancer, however SSL information is still
+required on the back end.
+
+The headers that are read are:
+
+* `SSL_CLIENT_CERT`
+* `SSL_CIPHER`
+* `SSL_SESSION_ID`
+* `SSL_CIPHER_USEKEYSIZE`
+
+This handler should only be used if the front end load balancer is configured to either set or clear these
+headers, otherwise remote users can trick the server into thinking that SSL is in use over a plaintext
+connection.
+
+=== Store Response Header
+
+|===
+| Name: | store-response
+| Class: | io.undertow.server.handlers.StoredResponseHandler
+| Parameters: |
+| Default Parameter |
+|===
+
+A handler that reads the full response and stores it in an attachment on the exchange. Generally used
+in combination with the request dumping handler to dump the response body.
+
+=== Stuck Thread Detection Handler
+
+|===
+| Name: | stuck-thread-detector
+| Class: | io.undertow.server.handlers.StuckThreadDetectionHandler
+| Parameters: | threshhold: int
+| Default Parameter | threshhold
+|===
+
+A handler that will print a log message if a request takes longer than the specified number of seconds
+to complete.
+
+=== Trace Handler
+
+|===
+| Name: | trace
+| Class: | io.undertow.server.handlers.HttpTraceHandler
+| Parameters: |
+| Default Parameter |
+|===
+
+A handler that responds to HTTP TRACE requests.
+
+=== Uncompress Handler
+
+|===
+| Name: | uncompress
+| Class: | io.undertow.server.handlers.encoding.RequestEncodingHandler
+| Parameters: |
+| Default Parameter |
+|===
+
+A handler that can decompress a content-encoded request. Note that such requests are not part of the
+HTTP standard, and as such represent a non-compatible extension. This will generally used for RPC
+protocols to enabled compressed invocations.
+
+=== URL Decoding Handler
+
+|===
+| Name: | url-decoding
+| Class: | io.undertow.server.handlers.URLDecodingHandler
+| Parameters: | charset: String (required)
+| Default Parameter | charset
+|===
+
+A handler that will decode the request path (including query parameters) into the specified charset. To
+use this handler request decoding must be disabled on the listener.
+
+// end::main[]
