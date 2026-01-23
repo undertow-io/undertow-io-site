@@ -109,7 +109,7 @@
 </div>
 
 <script>
-var baseURL = {{ "/" | relURL | safeJS }};
+var baseURL = "{{ "/" | relURL }}";
 function switchVersion(newVersion) {
     // Get current path
     var path = window.location.pathname;
