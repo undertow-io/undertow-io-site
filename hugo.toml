@@ -1,6 +1,7 @@
 baseURL = "https://undertow.io"
 languageCode = "en-us"
 title = "Undertow"
+relativeURLs = true
 
 [params]
   description = "Undertow - Flexible performant web server written in Java"
