@@ -20,8 +20,9 @@ COPY . /build/site
 WORKDIR /build/site
 RUN ./generate-pdfs.sh
 
-# Build Hugo site
-RUN hugo --minify
+# Build Hugo site (BASE_URL can be overridden for different deployments)
+ARG BASE_URL
+RUN if [ -n "$BASE_URL" ]; then hugo --minify --baseURL "$BASE_URL"; else hugo --minify; fi
 
 # Production image with just the static files
 FROM nginx:alpine
