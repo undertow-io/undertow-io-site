@@ -1,0 +1,16 @@
+{{ define "main" }}
+<div class="docs-wrapper">
+    <!-- Sidebar -->
+    <nav class="docs-sidebar">
+        {{ partial "docs-nav.html" . }}
+    </nav>
+
+    <!-- Main content -->
+    <main class="docs-content">
+        <h1>{{ .Title }}</h1>
+        {{ .Content }}
+
+        {{ partial "footer.html" . }}
+    </main>
+</div>
+{{ end }}

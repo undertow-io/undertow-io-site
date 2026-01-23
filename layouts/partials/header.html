@@ -16,7 +16,7 @@
                     <a class="nav-link{{ if eq .RelPermalink "/downloads/" }} active{{ end }}" href="{{ "downloads/" | relURL }}">Download</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link{{ if eq .RelPermalink "/documentation/" }} active{{ end }}" href="{{ "documentation/" | relURL }}">Documentation</a>
+                    <a class="nav-link{{ if hasPrefix .RelPermalink "/documentation" }} active{{ end }}" href="{{ "documentation/" | relURL }}">Documentation</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link{{ if eq .RelPermalink "/get-involved/" }} active{{ end }}" href="{{ "get-involved/" | relURL }}">Get Involved</a>

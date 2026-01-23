@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ .Site.Params.description }}{{ end }}">
+    <meta name="author" content="{{ .Site.Params.author }}">
+    <title>{{ if .Title }}{{ .Title }} · {{ end }}{{ .Site.Title }}</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom styles -->
+    <link rel="stylesheet" type="text/css" href="{{ "stylesheets/code.css" | relURL }}">
+
+    <!-- Highlight.js -->
+    <script type="text/javascript" src="{{ "javascripts/highlight.pack.js" | relURL }}"></script>
+    <script type="text/javascript">hljs.initHighlightingOnLoad();</script>
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="{{ "images/undertow_icon_16px.png" | relURL }}">
+
+    <style>
+        body {
+            padding-top: 70px;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            font-size: 15px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .redhat-tab {
+            position: fixed;
+            top: 0;
+            right: 100px;
+            z-index: 1031;
+        }
+        .redhat-tab a {
+            background-color: #cc0000;
+            color: white;
+            padding: 5px 15px;
+            text-decoration: none;
+            font-size: 12px;
+        }
+        .redhat-tab a:hover {
+            background-color: #990000;
+            color: white;
+        }
+        footer {
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 40px;
+            border-top: 1px solid #ccc;
+        }
+        .redhat-logo {
+            margin-top: 20px;
+        }
+        .redhat-logo img {
+            height: 40px;
+        }
+
+        /* Fixed width documentation container */
+        .docs-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+        }
+
+        /* Documentation sidebar styles */
+        .docs-sidebar {
+            width: 250px;
+            min-width: 250px;
+            position: sticky;
+            top: 70px;
+            height: calc(100vh - 70px);
+            overflow-y: auto;
+            border-right: 1px solid #ccc;
+            background-color: #f5f5f5;
+            padding: 1rem 0;
+        }
+        .docs-sidebar .nav-link {
+            color: #333;
+            padding: 0.25rem 1rem;
+            font-size: 0.875rem;
+            text-decoration: none;
+        }
+        .docs-sidebar .nav-link:hover {
+            color: #a00;
+            text-decoration: underline;
+        }
+        .docs-sidebar .nav-link.active {
+            color: #a00;
+            font-weight: bold;
+        }
+        .docs-sidebar .nav-section {
+            font-weight: bold;
+            color: #555;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            padding: 0.75rem 1rem 0.25rem;
+            margin-top: 0.5rem;
+            border-top: 1px solid #ddd;
+        }
+        .docs-sidebar .nav-section:first-child {
+            border-top: none;
+            margin-top: 0;
+        }
+
+        /* Main content area */
+        .docs-content {
+            flex: 1;
+            padding: 1.5rem 2rem;
+            max-width: 900px;
+        }
+
+        /* Classic headings */
+        .docs-content h1 {
+            font-size: 1.75rem;
+            font-weight: bold;
+            color: #333;
+            border-bottom: 2px solid #ccc;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .docs-content h2, .docs-content .sect1 > h2 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 0.3rem;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+        }
+        .docs-content h3, .docs-content .sect2 > h3 {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #444;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+        .docs-content h4, .docs-content .sect3 > h4 {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #555;
+            margin-top: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Classic links */
+        .docs-content a {
+            color: #004080;
+            text-decoration: underline;
+        }
+        .docs-content a:hover {
+            color: #a00;
+        }
+
+        /* Classic code blocks */
+        .docs-content pre {
+            background-color: #f8f8f8;
+            border: 1px solid #ccc;
+            padding: 1rem;
+            overflow-x: auto;
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Monaco, monospace;
+            font-size: 0.875rem;
+            line-height: 1.5;
+        }
+        .docs-content code {
+            font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Monaco, monospace;
+            font-size: 0.875em;
+            background-color: #f4f4f4;
+            padding: 0.1rem 0.3rem;
+            border: 1px solid #e0e0e0;
+        }
+        .docs-content pre code {
+            background: none;
+            border: none;
+            padding: 0;
+        }
+
+        /* Classic tables */
+        .docs-content table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+        }
+        .docs-content table,
+        .docs-content th,
+        .docs-content td {
+            border: 1px solid #999;
+        }
+        .docs-content th {
+            background-color: #e8e8e8;
+            font-weight: bold;
+            text-align: left;
+            padding: 0.5rem 0.75rem;
+        }
+        .docs-content td {
+            padding: 0.5rem 0.75rem;
+            vertical-align: top;
+        }
+        .docs-content tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .docs-content thead th {
+            background-color: #ddd;
+            border-bottom: 2px solid #999;
+        }
+
+        /* Classic lists */
+        .docs-content ul, .docs-content ol {
+            margin: 0.75rem 0;
+            padding-left: 2rem;
+        }
+        .docs-content li {
+            margin-bottom: 0.25rem;
+        }
+
+        /* Paragraphs */
+        .docs-content p {
+            margin-bottom: 1rem;
+        }
+
+        /* Images */
+        .docs-content img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #ccc;
+            padding: 4px;
+            background: #fff;
+        }
+
+        /* Admonition blocks */
+        .docs-content .admonitionblock {
+            margin: 1rem 0;
+            padding: 0.75rem 1rem;
+            border-left: 4px solid #666;
+            background-color: #f9f9f9;
+        }
+        .docs-content .admonitionblock.note {
+            border-left-color: #369;
+        }
+        .docs-content .admonitionblock.warning {
+            border-left-color: #c60;
+            background-color: #fff8f0;
+        }
+        .docs-content .admonitionblock.important {
+            border-left-color: #c00;
+            background-color: #fff0f0;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 991.98px) {
+            .docs-wrapper {
+                flex-direction: column;
+            }
+            .docs-sidebar {
+                width: 100%;
+                min-width: 100%;
+                position: relative;
+                top: 0;
+                height: auto;
+                border-right: none;
+                border-bottom: 1px solid #ccc;
+                padding-bottom: 1rem;
+            }
+            .docs-content {
+                max-width: 100%;
+                padding: 1rem;
+            }
+        }
+    </style>
+    {{- block "head" . }}{{- end }}
+</head>
+<body>
+    {{ partial "header.html" . }}
+
+    <div class="redhat-tab">
+        <a href="https://www.redhat.com">Red Hat</a>
+    </div>
+
+    {{- block "main" . }}{{- end }}
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Google Analytics -->
+    <script>
+        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+        })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+        ga('create', 'UA-61374382-1', 'auto');
+        ga('send', 'pageview');
+    </script>
+</body>
+</html>
