@@ -1,7 +1,7 @@
 #!/bin/bash 
 
 if [ "x$JBOSS_HOME" == "x" ]; then
-	echo "JBOSS_HOME is not set, please set it to the root of your Wildfly installation"
+	echo "JBOSS_HOME is not set, please set it to the root of your WildFly installation"
 	exit
 fi
 
@@ -24,9 +24,9 @@ curl http://central.maven.org/maven2/org/mortbay/jetty/alpn/alpn-boot/$ALPN_VERS
 #Add ALPN to the boot class path
 echo 'JAVA_OPTS="$JAVA_OPTS' " -Xbootclasspath/p:$JBOSS_HOME/bin/alpn-boot-$ALPN_VERSION.jar" '"' >>bin/standalone.conf
 
-#Start Wildfly in the background
+#Start WildFly in the background
 ./bin/standalone.sh &
-#wait for Wildfly to start
+#Wait for WildFly to start
 sleep 15
 
 #Add a HTTPS connector
@@ -35,5 +35,5 @@ sleep 15
 ./bin/jboss-cli.sh -c "--command=/core-service=management/security-realm=https/server-identity=ssl:add(keystore-path=server.keystore, keystore-password=password, keystore-relative-to=jboss.server.config.dir)"
 ./bin/jboss-cli.sh -c "--command=/subsystem=undertow/server=default-server/https-listener=https:add(socket-binding=https, security-realm=https, enable-http2=true)"
 
-#shut down Wildfly
+#Shut down WildFly
 kill `jps | grep jboss-modules.jar | cut -f1 -d ' ' `

@@ -22,7 +22,7 @@ handler, to anything in between.
 Undertow is designed to be fully embeddable, with easy to use fluent builder APIs. Undertow's lifecycle is completely
 controlled by the embedding application.
 
-Undertow is sponsored by JBoss and is the default web server in the link:https://github.com/wildfly/wildfly[Wildfly Application Server].
+Undertow is sponsored by JBoss and is the default web server in the link:https://github.com/wildfly/wildfly[WildFly Application Server].
 
 Why Undertow
 ------------
