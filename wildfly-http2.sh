@@ -9,7 +9,7 @@ cd $JBOSS_HOME
 
 #IMPORTANT: The ALPN version changes depending on the version of the JVM you are using
 #If you see class not found or similar SSL errors please look up the correct version
-# at http://eclipse.org/jetty/documentation/current/alpn-chapter.html
+# at https://eclipse.org/jetty/documentation/current/alpn-chapter.html
 ALPN_VERSION=8.1.3.v20150130
 
 #download our fake certificate for testing
@@ -19,7 +19,7 @@ curl https://raw.githubusercontent.com/undertow-io/undertow/master/core/src/test
 curl https://raw.githubusercontent.com/undertow-io/undertow/master/core/src/test/resources/server.truststore >standalone/configuration/server.truststore
 
 #Download the ALPN jar we are interested in
-curl http://central.maven.org/maven2/org/mortbay/jetty/alpn/alpn-boot/$ALPN_VERSION/alpn-boot-$ALPN_VERSION.jar >bin/alpn-boot-$ALPN_VERSION.jar
+curl https://central.maven.org/maven2/org/mortbay/jetty/alpn/alpn-boot/$ALPN_VERSION/alpn-boot-$ALPN_VERSION.jar >bin/alpn-boot-$ALPN_VERSION.jar
 
 #Add ALPN to the boot class path
 echo 'JAVA_OPTS="$JAVA_OPTS' " -Xbootclasspath/p:$JBOSS_HOME/bin/alpn-boot-$ALPN_VERSION.jar" '"' >>bin/standalone.conf

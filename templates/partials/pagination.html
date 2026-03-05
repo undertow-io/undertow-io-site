@@ -1,0 +1,15 @@
+{@io.quarkiverse.roq.frontmatter.runtime.model.NormalPage page}
+
+{#if page.paginator}
+<ul class="pager">
+    <li class="previous{#if !page.paginator.next} disabled{/if}">
+        <a href="{page.paginator.next ?: '#'}">&laquo; Older</a>
+    </li>
+
+    {!<li class="pages">Page {page.posts.current_page_index + 1} of {page.posts.pages.size}</li>!}
+
+    <li class="next{#if !page.paginator.previous} disabled{/if}">
+        <a href="{page.paginator.previous ?: '#'}">Newer &raquo;</a>
+    </li>
+</ul>
+{/if}

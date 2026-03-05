@@ -1,0 +1,23 @@
+---
+layout: project-blog
+title: Undertow now supports HTTP2 Draft 15
+author: Stuart Douglas
+email: <sdouglas@redhat.com>
+date: 2014-11-11
+revision: 1.0
+aliases: [/blog/2014/11/13/HTTP2-and-Undertow.html]
+
+---
+
+The Undertow 1.2 branch now supports the latest draft of the https://http2.github.io[HTTP2] spec. We have a demo
+site up and running at https://http2.undertow.io[].
+
+So far, we have verified HTTP/2 interop with the following browsers:
+
+* Chrome Canary (41.0.2217.0)
+* Firefox (Nightly build of 36.01a)
+* Internet Explorer (Windows 10 Preview)
+
+The demo site contains instructions for testing it out, including getting it running locally. The HTTP2 code is still
+quite new and will be evolving a lot over the coming months. For now most features of HTTP2 are supported, with the
+exception of priority, which is ignored.

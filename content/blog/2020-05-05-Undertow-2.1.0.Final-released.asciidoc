@@ -1,0 +1,53 @@
+---
+layout: project-blog
+title: Undertow 2.1.0.Final Released
+author: Flavia Rainone
+email: <frainone@redhat.com>
+date: 2020-05-05
+revision: 1.0
+---
+
+A couple of weeks ago we released Undertow 2.1.0.Final, and now it is part of the new
+https://wildfly.org/news/2020/05/04/WildFly-1910-Released/[WildFly 19.1.0.Final]!
+
+Undertow 2.1.0.Final comes with a new predicate handler: http://undertow.io/javadoc/2.1.x/io/undertow/server/handlers/SameSiteCookieHandler.html[samesite-cookie].
+
+This handler can be used to automatically add the `SameSite` attribute to cookies in your application, making it
+compatible with the latest draft for https://tools.ietf.org/html/draft-west-cookie-incrementalism-01[Incrementally Better Cookies] spec.
+
+Several clients support the new spec, and that means that your cookies without a `SameSite` attribute
+will be treated like a `SameSite=Lax` cookie, limiting your cookie to be sent to same-site
+requests and top-level cross-site navigations as specified https://tools.ietf.org/html/draft-ietf-httpbis-rfc6265bis-03#section-5.3.7.1[here].
+Whether this is the desired behavior for your cookie or if you want it to have one of the other two values for `SameSite` (`None` or `Strict`), it is a
+good practice to explicitly define the `SameSite` attribute in your cookies. This can be achieved via `samesite-cookie` handler:
+
+The handler can be used in the same way as any other predicate handler, in the form `predicate->handler`:
+
+----
+path(/app2)->samesite-cookie(`None`)
+----
+
+The predicate above will apply `SameSite=None` attribute to all cookies set when handling requests to the path `/app2`.
+As `None` is not https://www.chromium.org/updates/same-site/incompatible-clients[supported by all clients]
+the handler applies a client checker that skips the attribute if the client is not compatible.
+
+This client check is enabled by default, but can be explicitly enabled or disabled via `enable-client-checker` parameter:
+
+----
+path(/app2)->samesite-cookie(mode=None, enable-client-checker=false)
+----
+
+https://tools.ietf.org/html/draft-west-cookie-incrementalism-01#section-3.2[Session 3.2 of Incrementally Better Cookies] also makes it mandatory for cookies that have `SameSite=None` to have the `Secure` attribute.
+This is done automatically by the handler unless `add-secure-for-none=false` parameter is specified.
+
+Finally, the handler can be used in a finer grained way if desired, via the optional `cookie-pattern` parameter, that expects
+a cookie name regex.
+The example below adds `SameSite=Lax` to all cookies whose name start with `abc`:
+
+----
+path(/app2)->samesite-cookie(mode=Lax, cookie-pattern=abc*)
+----
+
+Besides the new handler, we have added several fixes to the project and updated dependencies to the latest.
+
+A full list of Jiras can be viewed https://issues.redhat.com/projects/UNDERTOW/versions/12344252[here]. I hope you all enjoy the new Undertow release!

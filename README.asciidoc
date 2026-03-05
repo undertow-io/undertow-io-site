@@ -1,0 +1,27 @@
+== Undertow Web Site
+
+=== Setting up the environment
+1. Install Java 21 or greater
+2. Clone the repo 
+   
+   `git clone git@github.com:undertow/undertow-io-site`
+
+=== Developing Changes
+1. Run Roq developer mode
+   
+   `mvn quarkus:dev`
+
+2. Make changes
+3. Point your browser to http://localhost:8080
+
+=== Deploying Changes
+1. Make sure everything has been committed and pushed to GitHub
+2. Give the workflow time to finish: https://github.com/undertow/undertow-io-site/actions
+3. Point your browser at https://undertow.io
+
+=== More information
+
+The Undertow web site is built using the Roq framework. More information can be found here:
+
+* https://iamroq.com[]
+* https://quarkus.io/extensions/io.quarkiverse.roq/quarkus-roq/[]
