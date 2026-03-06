@@ -1,0 +1,65 @@
+---
+layout: project
+title: Undertow
+author: Stuart Douglas
+email: <sdouglas@redhat.com>
+revision: 0.1
+---
+
+== Undertow
+
+Undertow is a flexible performant web server written in java, providing both blocking and non-blocking API's based on NIO.
+
+Undertow has a composition-based architecture that allows you to build a web server by combining small single purpose
+handlers. This design gives you the flexibility to choose between a full Java EE servlet 4.0 container, or a low-level non-blocking
+handler, to anything in between.
+
+Undertow is designed to be fully embeddable, with easy-to-use fluent builder APIs. Undertow's lifecycle is completely
+controlled by the embedding application.
+
+Undertow is sponsored by JBoss and is the default web server in the https://github.com/wildfly/wildfly[WildFly Application Server].
+
+== Why Undertow
+
+HTTP/2 Support::
+Undertow supports HTTP/2 out of the box, no overriding the boot class path required.
+
+HTTP Upgrade Support::
+Support for HTTP upgrade, to allow multiple protocols to be multiplexed over the HTTP port.
+
+Web Socket Support::
+Undertow provides full support for Web Sockets, including JSR-356 support.
+
+Servlet 4.0::
+Undertow provides support for Servlet 4.0, including support for embedded servlet. It is also possible to mix both
+Servlets and native undertow non-blocking handlers in the same deployment.
+
+Embeddable::
+Undertow can be embedded in an application or run standalone with just a few lines of code.
+
+Flexible::
+An Undertow server is configured by chaining handlers together. It is possible to add as much or as little functionality
+as you need, so you don't pay for what you are not using.
+
+== Show me the code
+
+Ok then. Here is a simple Hello World server using Async IO:
+
+[source,java]
+----
+public class HelloWorldServer {
+
+    public static void main(final String[] args) {
+        Undertow server = Undertow.builder()
+                .addHttpListener(8080, "localhost")
+                .setHandler(new HttpHandler() {
+                    @Override
+                    public void handleRequest(final HttpServerExchange exchange) throws Exception {
+                        exchange.getResponseHeaders().put(Headers.CONTENT_TYPE, "text/plain");
+                        exchange.getResponseSender().send("Hello World");
+                    }
+                }).build();
+        server.start();
+    }
+}
+----

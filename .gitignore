@@ -5,3 +5,5 @@ _site
 _tmp
 *~
 .sass-cache/
+target
+node_modules

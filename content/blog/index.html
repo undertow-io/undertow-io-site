@@ -1,0 +1,19 @@
+---
+layout: project
+paginate:
+    collection: blog
+    size: 5
+link: blog/index.html
+title: Undertow Blog
+title_link: /blog/
+body_class: blog index
+---
+{@io.quarkiverse.roq.frontmatter.runtime.model.NormalPage page}
+
+{#include partials/pagination /}
+
+{#for post in site.collections.blog.paginated(page.paginator)}
+  {#include partials/post.html parent=page post=post /}
+{/for}
+
+{#include partials/pagination /}

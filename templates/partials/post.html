@@ -1,0 +1,19 @@
+{@io.quarkiverse.roq.frontmatter.runtime.model.Page post}
+{@io.quarkiverse.roq.frontmatter.runtime.model.Page parent}
+
+<article class="post">
+  <header class="header">
+    <h2 class="title">
+      <a href="{post.url}">{post.title}</a>
+    </h2>
+    <div class="byline">
+      <span class="dateinline">on {post.date.format('MMM dd, yyyy')}</span>
+    </div>
+  </header>
+  <div class="body">
+    {post.contentAbstract}
+  </div>
+  <div class="footer">
+    <a href="{post.url}">Read more...</a>
+  </div>
+</article>

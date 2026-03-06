@@ -1,0 +1,18 @@
+---
+layout: project-blog
+title: Undertow 1.1.0.Final has been released
+author: Stuart Douglas
+email: <sdouglas@redhat.com>
+date: 2014-11-11
+revision: 1.0
+aliases: [/blog/2014/11/18/Undertow-1.html]
+---
+
+Undertow 1.1.0.Final has been released and is available from maven central. This release brings a number of improvements,
+including:
+
+- Websockets 1.1
+- SPDY support
+- Many bug fixes
+
+More details on websocket improvements and SPDY support will be coming in new blog posts in the coming weeks. 
