@@ -10,9 +10,10 @@
         <title>{page.title} · {site.title}</title>
         {#seo page site /}
         {#rss site /}
-        
+
+        {#bundle /}
+
         <link href="https://static.jboss.org/theme/css/bootstrap-community/2.3.1.1/bootstrap-community.min.css" rel="stylesheet" media="screen">
-        <link rel="stylesheet" type="text/css" href="{site.url('/stylesheets/code.css')}">
         <script type="text/javascript" src="{site.url('/javascripts/highlight.pack.js')}"></script>
         <script type="text/javascript">hljs.initHighlightingOnLoad();</script>
 
@@ -73,12 +74,7 @@
             <div id="companyfooter-placeholder"></div>
         </div>
         <div class="container" id="companyfooter">
-            <div class="redhatlogo">
-                <div id="logospacer"></div>
-                <a href="https://www.redhat.com/">
-                    <img src="https://static.jboss.org/theme/images/common/redhat_logo.png">
-                </a>
-            </div>
+            {#include partials/commonhaus-footer.html /}
         </div>
 
         <script>
