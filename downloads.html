@@ -1,15 +1,194 @@
-<!DOCTYPE html> <html lang="en"> <head> <meta charset="utf-8"> <meta content="width=device-width, initial-scale=1.0" name="viewport"> <meta content="" name="description"> <meta content="Stuart Douglas" name="author"> <title>Downloads · JBoss Community</title> <link href="https://static.jboss.org/theme/css/bootstrap-community/2.3.1.1/bootstrap-community.min.css" media="screen" rel="stylesheet"> <link href="https://undertow.io/stylesheets/code.css" rel="stylesheet" type="text/css"> <script src="https://undertow.io/javascripts/highlight.pack.js" type="text/javascript"></script> <script type="text/javascript">hljs.initHighlightingOnLoad();</script> <!--[if lt IE 9]><script src="https://static.jboss.org/theme/js/libs/html5/pre3.6/html5.min.js"></script><![endif]--> <link href="https://undertow.io/images/undertow_icon_16px.png" rel="shortcut icon"> <link href="https://static.jboss.org/images/example/apple-touch-icon-144x144-precomposed.png" rel="apple-touch-icon-precomposed" sizes="144x144"> <link href="https://static.jboss.org/images/example/apple-touch-icon-114x114-precomposed.png" rel="apple-touch-icon-precomposed" sizes="114x114"> <link href="https://static.jboss.org/images/example/apple-touch-icon-72x72-precomposed.png" rel="apple-touch-icon-precomposed" sizes="72x72"> <link href="https://static.jboss.org/images/example/apple-touch-icon-precomposed.png" rel="apple-touch-icon-precomposed"> <style>
-  @media (min-width: 651px) {
-      .banner { background-image: url(https://undertow.io/images/undertow_banner.png); height: 110px;  }
-  }
-  @media (max-width: 650px) {
-      .banner { width: 200px; margin: 0px auto; }
-  }
-</style> <script src="https://static.jboss.org/theme/js/libs/jquery/jquery-1.9.1.min.js"></script> </head> <body> <div class="container" id="content"> <div class="dropup"> <a class="tabnav-closed" href="https://www.redhat.com" id="tab">Red Hat</a> </div> <div class="banner"> </div> <div class="navbar navbar-inverse" id="navbar-fix"> <div class="navbar-inner"> <div class="container"> <a class="btn btn-navbar" data-target=".nav-collapse" data-toggle="collapse"> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </a> <div class="nav-collapse collapse"> <ul class="nav"> <li class=""><a href="https://undertow.io/index.html">Home</a></li> <li class=""><a href="https://undertow.io/blog/index.html">Blog</a></li> <li class="active"><a href="https://undertow.io/downloads.html">Download</a></li> <li class=""><a href="https://undertow.io/documentation.html">Documentation</a></li> <li class=""><a href="https://undertow.io/get-involved.html">Get Involved</a></li> <li class="divider"></li> </ul> </div> </div> </div> </div> <div class="sect1"> <h2 id="_downloads">Downloads</h2> <div class="sectionbody"> <div class="paragraph"> <p>The easiest way to get started using Undertow is to download the <a href="http://www.wildfly.org/downloads/">Wildfly Application Server</a>.</p> </div> <div class="paragraph"> <p>Undertow is the default web server in Wildfly, so usage is as simple as deploying a war.</p> </div> <div class="sect2"> <h3 id="_maven">Maven</h3> <div class="paragraph"> <p>If you want to embed Undertow then you will most likely want to use Maven. There are currently two version branches for Undertow:</p> </div> <div class="dlist"> <dl> <dt class="hdlist1">2.1</dt> <dd> <p>The current stable Servlet 4.0 branch, requires JDK8 or above</p> </dd> <dt class="hdlist1">1.4</dt> <dd> <p>The current stable Servlet 3.1 branch, supports JDK7</p> </dd> </dl> </div> <div class="paragraph"> <p>In order to use Undertow you need to add the following artifacts to your pom:</p> </div> <div class="listingblock"> <div class="content"> <pre class="highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;&#x000A;    &lt;groupId&gt;io.undertow&lt;/groupId&gt;&#x000A;    &lt;artifactId&gt;undertow-core&lt;/artifactId&gt;&#x000A;    &lt;version&gt;2.1.0.Final&lt;/version&gt;&#x000A;&lt;/dependency&gt;&#x000A;&#x000A;&lt;dependency&gt;&#x000A;    &lt;groupId&gt;io.undertow&lt;/groupId&gt;&#x000A;    &lt;artifactId&gt;undertow-servlet&lt;/artifactId&gt;&#x000A;    &lt;version&gt;2.1.0.Final&lt;/version&gt;&#x000A;&lt;/dependency&gt;&#x000A;&#x000A;&lt;dependency&gt;&#x000A;    &lt;groupId&gt;io.undertow&lt;/groupId&gt;&#x000A;    &lt;artifactId&gt;undertow-websockets-jsr&lt;/artifactId&gt;&#x000A;    &lt;version&gt;2.1.0.Final&lt;/version&gt;&#x000A;&lt;/dependency&gt;</code></pre> </div> </div> <div class="paragraph"> <p>You will only need the Undertow Servlet artifact if you wish to use Servlet in your application.</p> </div> <div class="paragraph"> <p>If you just want to download the jars directly you can download them from <a href="http://search.maven.org/#search|ga|1|g%3A%22io.undertow%22">Maven Central</a>.</p> </div> </div> </div> </div> <div id="companyfooter-placeholder"></div> </div> <div class="container" id="companyfooter"> <div class="redhatlogo"> <div id="logospacer"></div> <a href="https://www.redhat.com/"><img src="https://static.jboss.org/theme/images/common/redhat_logo.png"></a> </div> </div> <script src="https://static.jboss.org/wildfly/scripts/bootstrap-community.min.js"></script> <script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-  ga('create', 'UA-61374382-1', 'auto');
-  ga('send', 'pageview');
-</script> </body> </html>
+
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="description" content="">
+        <meta name="author" content="{page.data.author}">
+        <title>Downloads · Undertow</title>
+
+
+  <!-- SEO TITLE -->
+  
+  <title>Downloads - Undertow</title>
+  <meta property="og:title" content="Downloads" />
+  <meta name="twitter:title" content="Downloads">
+  <meta property="og:site_name" content="Undertow">
+  <!-- SEO AUTHOR -->
+  <meta property="article:author" content="Stuart Douglas" />
+  <meta name="author" content="Stuart Douglas" />
+  <!-- SEO URL -->
+  <link rel="canonical" href="/downloads.html" />
+  <meta property="og:url" content="/downloads.html" />
+  <meta name="twitter:url" content="/downloads.html">
+
+  <!-- SEO TYPE -->
+  <meta property="og:type" content="article" />
+  <meta property="article:published_time" content="2026-03-12T11:46:29.799801-05:00[America/Chicago]" />
+
+  <!-- SEO IMAGE -->
+  <meta name="twitter:card" content="summary">
+  <!-- SEO LOCALE -->
+  <meta property="og:locale" content="en_US" />
+  <!-- SEO GENERATOR -->
+  <meta name="generator" content="Quarkus Roq v2.0.5" />
+
+
+    <script type="module" src="/static/bundle/app-ZEFXAFNZ.js"></script>
+      <link rel="stylesheet" href="/static/bundle/app-KDUQEL2Z.css" />
+
+        <link href="https://static.jboss.org/theme/css/bootstrap-community/2.3.1.1/bootstrap-community.min.css" rel="stylesheet" media="screen">
+        <script type="text/javascript" src="/javascripts/highlight.pack.js"></script>
+        <script type="text/javascript">hljs.initHighlightingOnLoad();</script>
+
+        <link rel="shortcut icon" href="/images/undertow_icon_16px.png">
+        <style>
+            @media (min-width: 651px) {
+                .banner { background-image: url(/images/undertow_banner.png); height: 110px;  }
+            }
+            @media (max-width: 650px) {
+                .banner { width: 200px; margin: 0px auto; }
+            }
+        </style>
+
+        <script src="https://static.jboss.org/theme/js/libs/jquery/jquery-1.9.1.min.js"></script>
+    </head>
+    <body>
+        <div class="container" id="content">
+            <div class="dropup">
+                <a id="tab" class="tabnav-closed" href="https://www.redhat.com">Red Hat</a>
+            </div>
+
+            <div class="banner"></div>
+
+            <div class="navbar navbar-inverse" id="navbar-fix">
+                <div class="navbar-inner">
+                    <div class="container">
+                        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </a>
+                        <div class="nav-collapse collapse">
+                            <ul class="nav">
+                                <li class="">
+                                    <a href="/">Home</a>
+                                </li>
+                                <li class="">
+                                    <a href="/blog">Blog</a>
+                                </li>
+                                <li class="active">
+                                    <a href="/downloads.html">Download</a>
+                                </li>
+                                <li class="">
+                                    <a href="/documentation.html">Documentation</a>
+                                </li>
+                                <li class="">
+                                    <a href="/get-involved.html">Get Involved</a>
+                                </li>
+                                <li class="divider"></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+<div class="sect1">
+<h2 id="_downloads">Downloads</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>The easiest way to get started using Undertow is to download the
+<a href="https://www.wildfly.org/downloads/">WildFly Application Server</a>.</p>
+</div>
+<div class="paragraph">
+<p>Undertow is the default web server in WildFly, so usage is as simple as deploying a war.</p>
+</div>
+<div class="sect2">
+<h3 id="_maven">Maven</h3>
+<div class="paragraph">
+<p>If you want to embed Undertow then you will most likely want to use Maven. There are currently three version branches
+for Undertow:</p>
+</div>
+<div class="dlist">
+<dl>
+<dt class="hdlist1">2.1</dt>
+<dd>
+<p>The current stable Servlet 4.0 branch, requires JDK8 or above</p>
+</dd>
+<dt class="hdlist1">1.4</dt>
+<dd>
+<p>The current stable Servlet 3.1 branch, supports JDK7</p>
+</dd>
+</dl>
+</div>
+<div class="paragraph">
+<p>In order to use Undertow, you need to add the following artifacts to your pom:</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlight"><code class="language-xml" data-lang="xml">&lt;dependency&gt;
+    &lt;groupId&gt;io.undertow&lt;/groupId&gt;
+    &lt;artifactId&gt;undertow-core&lt;/artifactId&gt;
+    &lt;version&gt;2.1.0.Final&lt;/version&gt;
+&lt;/dependency&gt;
+
+&lt;dependency&gt;
+    &lt;groupId&gt;io.undertow&lt;/groupId&gt;
+    &lt;artifactId&gt;undertow-servlet&lt;/artifactId&gt;
+    &lt;version&gt;2.1.0.Final&lt;/version&gt;
+&lt;/dependency&gt;
+
+&lt;dependency&gt;
+    &lt;groupId&gt;io.undertow&lt;/groupId&gt;
+    &lt;artifactId&gt;undertow-websockets-jsr&lt;/artifactId&gt;
+    &lt;version&gt;2.1.0.Final&lt;/version&gt;
+&lt;/dependency&gt;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>You will only need the Undertow Servlet artifact if you wish to use Servlet in your application.</p>
+</div>
+<div class="paragraph">
+<p>If you just want to download the jars directly, you can download them from
+<a href="https://search.maven.org/#search|ga|1|g%3A%22io.undertow%22">Maven Central</a>.</p>
+</div>
+</div>
+</div>
+</div>
+            <div id="companyfooter-placeholder"></div>
+        </div>
+        <div class="container" id="companyfooter">
+<div class="content commonhaus-footer">
+  <div class="grid-wrapper">
+    <div class="commonhaus-logo">
+      <a href="https://www.commonhaus.org/" target="_blank">
+          <img src="https://raw.githubusercontent.com/commonhaus/artwork/main/foundation/brand/svg/CF_logo_horizontal_single_default.svg"/>
+      </a>
+    </div>
+    <div class="commonhaus-legal">
+        Copyright © <a href="https://www.undertow.io">Undertow</a>. All rights reserved. For details on our trademarks,
+        please visit our <a href="https://www.commonhaus.org/policies/trademark-policy/">Trademark Policy</a> and
+        <a href="https://www.commonhaus.org/trademarks/">Trademark List</a>. Trademarks of third parties are owned by
+        their respective holders and their mention here does not suggest any endorsement or association.
+    </div>
+  </div>
+</div>
+            <div class="redhatlogo">
+                <div id="logospacer"></div>
+                <a href="https://www.redhat.com/">
+                    <img src="https://static.jboss.org/theme/images/common/redhat_logo.png">
+                </a>
+            </div>
+        </div>
+
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+            ga('create', 'UA-61374382-1', 'auto');
+            ga('send', 'pageview');
+        </script>
+    </body>
+</html>
