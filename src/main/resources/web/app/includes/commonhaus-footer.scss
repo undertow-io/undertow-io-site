@@ -1,0 +1,51 @@
+.commonhaus-footer {
+  /*background-color: $black;*/
+
+  .grid-wrapper { padding: .5rem 0; }
+
+  .commonhaus-logo {
+    grid-column: 1/4;
+    grid-row: 1;
+    justify-self: left;
+    align-self: auto;
+    img { 
+        height: 30px; 
+    }
+    @media screen and (max-width: 1024px) {
+      grid-column: 1/4;
+      justify-self: center;
+    }
+    @media screen and (max-width: 768px) {
+      grid-column: 1/4;
+    }
+    @media screen and (max-width: 480px) {
+      grid-column: 1/13;
+      justify-self: center;
+      order: 1;
+    }
+  }
+
+  .commonhaus-legal {
+    grid-column: 4/13;
+    grid-row: 1;
+    align-self: start;
+    justify-self: center;
+    font-size: .75rem;
+    font-weight: 200;
+    a {
+      /*color: $white;*/
+    }
+    @media screen and (max-width: 1024px) {
+      grid-column: 4/12;
+      justify-self: center;
+    }
+    @media screen and (max-width: 768px) {
+      grid-column: 4/11;
+    }
+    @media screen and (max-width: 480px) {
+      grid-column: 1/13;
+      justify-self: center;
+      order: 2;
+    }
+  }
+}
